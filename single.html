@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Одномассовые маховики — Ремонт маховиков в Беларуси</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__top">
+      <div class="container header__top-inner">
+        <div class="logo">
+          <div class="logo__icon">⚙</div>
+          <div class="logo__text">
+            <span class="logo__title">Профессиональный ремонт двухмассовых и одномассовых маховиков</span>
+            <span class="logo__sub">Ремонт / восстановление / реставрация маховиков в Беларуси</span>
+          </div>
+        </div>
+        <div class="phone-btns">
+          <a href="tel:+375293227070" class="phone-btn phone-btn--call">📞 +375 (29) 322-70-70</a>
+          <a href="https://wa.me/375293227070" target="_blank" rel="noopener" class="phone-btn phone-btn--wa">WhatsApp</a>
+          <a href="viber://chat?number=%2B375293227070" class="phone-btn phone-btn--vb">Viber</a>
+        </div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="container">
+        <button class="nav__burger" id="burger" aria-label="Меню">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav__list" id="navList">
+          <li><a href="index.html" class="nav__link">Главная</a></li>
+          <li><a href="diagnostics.html" class="nav__link">Диагностика маховика</a></li>
+          <li><a href="repair.html" class="nav__link">Ремонт</a></li>
+          <li><a href="contacts.html" class="nav__link">Контакты</a></li>
+          <li><a href="single.html" class="nav__link active">Одномассовые</a></li>
+          <li><a href="warranty.html" class="nav__link">Гарантия</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <section class="page-hero">
+    <div class="container">
+      <h1 class="animate-up">Одномассовые <span>маховики</span></h1>
+    </div>
+  </section>
+
+  <section class="page-content">
+    <div class="container">
+      <div class="single-content animate-up">
+        <h2 class="section-title">Восстанавливаем также обычные или одномассовые маховики</h2>
+        <p>Процесс заключается в выравнивании плоскости прилегания ведомого диска сцепления и плоскости установки корзины сцепления. После этого обязательно производится балансировка маховика.</p>
+        <p>Данная услуга позволяет значительно продлить срок службы маховика и избежать дорогостоящей замены. Все работы выполняются на профессиональном оборудовании с соблюдением заводских допусков.</p>
+        <a href="contacts.html" class="btn btn--primary" style="margin-top:16px; display:inline-flex;">Записаться на ремонт</a>
+      </div>
+
+      <div class="slider animate-up delay-1" style="margin-top:48px;">
+        <div class="slider__track" id="sliderTrack">
+          <div class="slider__slide" data-index="0">
+            <img src="images/work9.jpg" alt="Одномассовый маховик после ремонта">
+            <div class="slider__caption">Одномассовый маховик после ремонта</div>
+          </div>
+          <div class="slider__slide" data-index="1">
+            <img src="images/work10.jpg" alt="Одномассовый маховик после балансировки">
+            <div class="slider__caption">Одномассовый маховик после балансировки</div>
+          </div>
+        </div>
+        <button class="slider__btn slider__btn--prev" id="sliderPrev" aria-label="Назад">&#8592;</button>
+        <button class="slider__btn slider__btn--next" id="sliderNext" aria-label="Вперёд">&#8594;</button>
+      </div>
+      <div class="slider__dots" id="sliderDots"></div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox__close" id="lightboxClose" aria-label="Закрыть">&#10005;</button>
+    <button class="lightbox__btn lightbox__btn--prev" id="lightboxPrev" aria-label="Назад">&#8592;</button>
+    <div class="lightbox__img-wrap">
+      <img src="" alt="" id="lightboxImg">
+      <div class="lightbox__caption" id="lightboxCaption"></div>
+    </div>
+    <button class="lightbox__btn lightbox__btn--next" id="lightboxNext" aria-label="Вперёд">&#8594;</button>
+  </div>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>ИП Стадуб Василий Иванович · УНП 191847860 · Дата регистрации 10.01.2013г.</p>
+      <p><a href="tel:+375293227070">+375 (29) 322-70-70</a></p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

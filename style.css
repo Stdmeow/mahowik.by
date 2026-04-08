@@ -97,11 +97,8 @@ img { max-width: 100%; display: block; }
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 2px;
-  transition: var(--transition);
+  gap: 6px;
 }
-
-.phone:hover { transform: scale(1.04); }
 
 .phone__label {
   font-size: 0.72rem;
@@ -115,6 +112,115 @@ img { max-width: 100%; display: block; }
   font-weight: 700;
   font-size: 1.25rem;
   color: var(--yellow);
+}
+
+.phone__btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.phone__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 50px;
+  font-family: var(--font-main);
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.phone__btn--call {
+  background: var(--yellow);
+  color: var(--dark);
+}
+
+.phone__btn--call:hover {
+  background: var(--yellow-dark);
+  transform: translateY(-2px);
+}
+
+.phone__btn--viber {
+  background: #7360f2;
+  color: #fff;
+}
+
+.phone__btn--viber:hover {
+  background: #5a4bd1;
+  transform: translateY(-2px);
+}
+
+.phone__btn--whatsapp {
+  background: #25d366;
+  color: #fff;
+}
+
+.phone__btn--whatsapp:hover {
+  background: #1ebe5d;
+  transform: translateY(-2px);
+}
+
+/* phone-btn (header variant) */
+.phone-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.phone-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border-radius: 50px;
+  font-family: var(--font-main);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.phone-btn--call {
+  background: var(--yellow);
+  color: var(--dark);
+}
+
+.phone-btn--call:hover {
+  background: var(--yellow-dark);
+  transform: translateY(-2px);
+}
+
+.phone-btn--vb {
+  background: #7360f2;
+  color: #fff;
+}
+
+.phone-btn--vb:hover {
+  background: #5a4bd1;
+  transform: translateY(-2px);
+}
+
+.phone-btn--wa {
+  background: #25d366;
+  color: #fff;
+}
+
+.phone-btn--wa:hover {
+  background: #1ebe5d;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 640px) {
+  .phone-btns { justify-content: flex-start; gap: 6px; }
+  .phone-btn { font-size: 0.7rem; padding: 6px 10px; }
 }
 
 /* NAV */

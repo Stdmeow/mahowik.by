@@ -1038,7 +1038,7 @@ img { max-width: 100%; display: block; }
     opacity: 1;
     padding-bottom: 10px;
   }
-  .nav__link { padding: 12px 20px; }
+  .nav__link::after { display: none; }
 
   .stats__grid { grid-template-columns: 1fr 1fr; }
   .advantages__grid { grid-template-columns: 1fr; }
@@ -1471,7 +1471,9 @@ body { font-size: 16px; }
 }
 
 @media (max-width: 900px) {
-  .mobile-bar {
+  .mobile-nav-popup {
+    display: block;
+  }
     display: flex;
     position: fixed;
     bottom: 0; left: 0; right: 0;

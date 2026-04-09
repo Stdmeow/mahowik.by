@@ -5,12 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Профессиональный ремонт маховиков в Беларуси</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- HEADER -->
   <header class="header">
     <div class="header__top">
       <div class="container header__top-inner">
@@ -20,6 +19,12 @@
             <span class="logo__title">Профессиональный ремонт двухмассовых и одномассовых маховиков</span>
             <span class="logo__sub">Ремонт / восстановление / реставрация маховиков в Беларуси</span>
           </div>
+        </div>
+        <div class="phone-btns">
+          <a href="tel:+375293227070" class="phone-btn phone-btn--call">📞 +375 (29) 322-70-70</a>
+          <a href="https://wa.me/375293227070" target="_blank" rel="noopener" class="phone-btn phone-btn--wa">WhatsApp</a>
+          <a href="viber://chat?number=%2B375293227070" class="phone-btn phone-btn--vb">Viber</a>
+          <a href="https://t.me/+375293227070" target="_blank" rel="noopener" class="phone-btn phone-btn--tg">Telegram</a>
         </div>
       </div>
     </div>
@@ -32,8 +37,8 @@
           <li><a href="index.html" class="nav__link active">Главная</a></li>
           <li><a href="diagnostics.html" class="nav__link">Диагностика маховика</a></li>
           <li><a href="repair.html" class="nav__link">Ремонт</a></li>
-          <li><a href="contacts.html" class="nav__link">Контакты</a></li>
           <li><a href="single.html" class="nav__link">Одномассовые</a></li>
+          <li><a href="contacts.html" class="nav__link">Контакты</a></li>
           <li><a href="warranty.html" class="nav__link">Гарантия</a></li>
         </ul>
       </div>
@@ -51,27 +56,25 @@
         <a href="repair.html" class="btn btn--outline">Узнать подробнее</a>
       </div>
     </div>
-    <div class="hero__scroll">
-      <span></span>
-    </div>
+    <div class="hero__scroll"><span></span></div>
   </section>
 
   <!-- STATS -->
   <section class="stats">
     <div class="container stats__grid">
-      <div class="stat-card animate-fade">
-        <div class="stat-card__icon">💰</div>
-        <div class="stat-card__value">В 2–4 раза</div>
+      <div class="stat-card animate-fade"> 
+        <div class="stat-card__icon">💵</div>
+        <div class="stat-card__value">В 2–4 раза</div> 
         <div class="stat-card__label">дешевле нового</div>
       </div>
       <div class="stat-card animate-fade delay-1">
-        <div class="stat-card__icon">🛣</div>
+        <div class="stat-card__icon">🛣️</div>
         <div class="stat-card__value">250 000 км</div>
         <div class="stat-card__label">пробег после ремонта</div>
       </div>
       <div class="stat-card animate-fade delay-2">
         <div class="stat-card__icon">🛡</div>
-        <div class="stat-card__value">До 2 месяцев</div>
+        <div class="stat-card__value">До 3 месяцев</div>
         <div class="stat-card__label">гарантия без ограничения пробега</div>
       </div>
       <div class="stat-card animate-fade delay-3">
@@ -79,6 +82,28 @@
         <div class="stat-card__value">6–24 часа</div>
         <div class="stat-card__label">срок ремонта</div>
       </div>
+    </div>
+  </section>
+
+  <!-- GALLERY SLIDER -->
+  <section class="gallery">
+    <div class="container">
+      <h2 class="section-title text-center animate-up">Наши работы</h2>
+      <div class="slider animate-up delay-1">
+        <div class="slider__track" id="sliderTrack">
+          <div class="slider__slide" data-index="0"><img src="images/work1.jpg" alt="Рено 1.9dci"><div class="slider__caption">Рено 1.9dci</div></div>
+          <div class="slider__slide" data-index="1"><img src="images/work2.jpg" alt="Обменный фонд маховиков"><div class="slider__caption">Обменный фонд маховиков</div></div>
+          <div class="slider__slide" data-index="2"><img src="images/work3.jpg" alt="Двухмассовый маховик"><div class="slider__caption">Двухмассовый маховик</div></div>
+          <div class="slider__slide" data-index="3"><img src="images/work4.jpg" alt="Новые европейские комплектующие"><div class="slider__caption">Новые европейские комплектующие</div></div>
+          <div class="slider__slide" data-index="4"><img src="images/work5.jpg" alt="Новые европейские комплектующие"><div class="slider__caption">Новые европейские комплектующие</div></div>
+          <div class="slider__slide" data-index="5"><img src="images/work6.jpg" alt="Пружины маховика"><div class="slider__caption">Пружины маховика</div></div>
+          <div class="slider__slide" data-index="6"><img src="images/work7.jpg" alt="Процесс балансировки"><div class="slider__caption">Процесс балансировки</div></div>
+          <div class="slider__slide" data-index="7"><img src="images/work8.jpg" alt="Балансировка окончена"><div class="slider__caption">Балансировка окончена</div></div>
+        </div>
+        <button class="slider__btn slider__btn--prev" id="sliderPrev" aria-label="Назад">&#8592;</button>
+        <button class="slider__btn slider__btn--next" id="sliderNext" aria-label="Вперёд">&#8594;</button>
+      </div>
+      <div class="slider__dots" id="sliderDots"></div>
     </div>
   </section>
 
@@ -99,18 +124,10 @@
   <section class="about">
     <div class="container about__grid">
       <div class="about__services animate-left">
-        <a href="diagnostics.html" class="service-btn">
-          <span class="service-btn__icon">🔍</span> Диагностика
-        </a>
-        <a href="repair.html" class="service-btn">
-          <span class="service-btn__icon">🔧</span> Ремонт
-        </a>
-        <a href="contacts.html" class="service-btn">
-          <span class="service-btn__icon">📞</span> Контакты
-        </a>
-        <a href="warranty.html" class="service-btn">
-          <span class="service-btn__icon">🛡</span> Гарантия
-        </a>
+        <a href="diagnostics.html" class="service-btn"><span class="service-btn__icon">🔍</span> Диагностика</a>
+        <a href="repair.html" class="service-btn"><span class="service-btn__icon">🔧</span> Ремонт</a>
+        <a href="contacts.html" class="service-btn"><span class="service-btn__icon">📞</span> Контакты</a>
+        <a href="warranty.html" class="service-btn"><span class="service-btn__icon">🛡</span> Гарантия</a>
       </div>
       <div class="about__text animate-right">
         <h2 class="section-title">О компании</h2>
@@ -126,26 +143,11 @@
     <div class="container">
       <h2 class="section-title text-center animate-up">Наши преимущества</h2>
       <div class="advantages__grid">
-        <div class="adv-card animate-fade">
-          <div class="adv-card__num">01</div>
-          <p>Опыт работы в данной области больше любой другой организации в Республике Беларусь</p>
-        </div>
-        <div class="adv-card animate-fade delay-1">
-          <div class="adv-card__num">02</div>
-          <p>Срок ремонта: от 6 до 24 часов</p>
-        </div>
-        <div class="adv-card animate-fade delay-2">
-          <div class="adv-card__num">03</div>
-          <p>Запчасти в наличии на большинство маховиков</p>
-        </div>
-        <div class="adv-card animate-fade delay-3">
-          <div class="adv-card__num">04</div>
-          <p>Высокоточная балансировка</p>
-        </div>
-        <div class="adv-card animate-fade delay-4">
-          <div class="adv-card__num">05</div>
-          <p>Гарантия до 3 месяцев без ограничения пробега автомобиля</p>
-        </div>
+        <div class="adv-card animate-fade"><div class="adv-card__num">01</div><p>Опыт работы в данной области больше любой другой организации в Республике Беларусь</p></div>
+        <div class="adv-card animate-fade delay-1"><div class="adv-card__num">02</div><p>Срок ремонта: от 6 до 24 часов</p></div>
+        <div class="adv-card animate-fade delay-2"><div class="adv-card__num">03</div><p>Запчасти в наличии на большинство маховиков</p></div>
+        <div class="adv-card animate-fade delay-3"><div class="adv-card__num">04</div><p>Высокоточная балансировка</p></div>
+        <div class="adv-card animate-fade delay-4"><div class="adv-card__num">05</div><p>Гарантия до 3 месяцев без ограничения пробега автомобиля</p></div>
       </div>
     </div>
   </section>
@@ -158,57 +160,24 @@
         <div class="workhours__row"><span>ПН — ЧТ</span><span>9:30 — 17:30</span></div>
         <div class="workhours__row"><span>ПТН</span><span>9:30 — 16:30</span></div>
         <div class="workhours__row workhours__row--off"><span>СБ, ВС</span><span>Выходной</span></div>
-        <div class="workhours__address">
-          <span>📍</span>
-          <span>г. Минск, пер. Ольшевского 7/9, пом. 109</span>
-        </div>
+        <div class="workhours__address"><span>📍</span><span>г. Минск, пер. Ольшевского 7/9, пом. 109</span></div>
       </div>
     </div>
   </section>
 
-  <!-- GALLERY SLIDER -->
-  <section class="gallery">
-    <div class="container">
-      <h2 class="section-title text-center animate-up">Наши работы</h2>
-      <div class="slider animate-up delay-1">
-        <div class="slider__track" id="sliderTrack">
-          <div class="slider__slide" data-index="0">
-            <img src="images/work1.jpg" alt="Рено 1.9dci">
-            <div class="slider__caption">Рено 1.9dci</div>
-          </div>
-          <div class="slider__slide" data-index="1">
-            <img src="images/work2.jpg" alt="Маховики">
-            <div class="slider__caption">Обменный фонд маховиков</div>
-          </div>
-          <div class="slider__slide" data-index="2">
-            <img src="images/work3.jpg" alt="Двухмассовый маховик">
-            <div class="slider__caption">Двухмассовый маховик</div>
-          </div>
-          <div class="slider__slide" data-index="3">
-            <img src="images/work4.jpg" alt="Новые европейские комплектующие">
-            <div class="slider__caption">Новые европейские комплектующие</div>
-          </div>
-          <div class="slider__slide" data-index="4">
-            <img src="images/work5.jpg" alt="Новые европейские комплектующие">
-            <div class="slider__caption">Новые европейские комплектующие</div>
-          </div>
-          <div class="slider__slide" data-index="5">
-            <img src="images/work6.jpg" alt="Пружины маховика">
-            <div class="slider__caption">Пружины маховика</div>
-          </div>
-          <div class="slider__slide" data-index="6">
-            <img src="images/work7.jpg" alt="Процесс балансировки">
-            <div class="slider__caption">Процесс балансировки</div>
-          </div>
-          <div class="slider__slide" data-index="7">
-            <img src="images/work8.jpg" alt="Балансировка окончена">
-            <div class="slider__caption">Балансировка окончена</div>
-          </div>
-        </div>
-        <button class="slider__btn slider__btn--prev" id="sliderPrev" aria-label="Назад">&#8592;</button>
-        <button class="slider__btn slider__btn--next" id="sliderNext" aria-label="Вперёд">&#8594;</button>
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container cta__inner">
+      <div class="cta__text">
+        <div class="cta__title">Свяжитесь с нами</div>
+        <div class="cta__sub">A1, Viber, WhatsApp, Telegram · г. Минск, пер. Ольшевского 7/9, пом. 109</div>
       </div>
-      <div class="slider__dots" id="sliderDots"></div>
+      <div class="cta__btns">
+        <a href="tel:+375293227070" class="phone-btn phone-btn--call">📞 +375 (29) 322-70-70</a>
+        <a href="https://wa.me/375293227070" target="_blank" rel="noopener" class="phone-btn phone-btn--wa">WhatsApp</a>
+        <a href="viber://chat?number=%2B375293227070" class="phone-btn phone-btn--vb">Viber</a>
+        <a href="https://t.me/+375293227070" target="_blank" rel="noopener" class="phone-btn phone-btn--tg">Telegram</a>
+      </div>
     </div>
   </section>
 
@@ -223,22 +192,6 @@
     <button class="lightbox__btn lightbox__btn--next" id="lightboxNext" aria-label="Вперёд">&#8594;</button>
   </div>
 
-  <!-- CTA CONTACTS -->
-  <section class="cta">
-    <div class="container cta__inner">
-      <div class="cta__text">
-        <div class="cta__title">Свяжитесь с нами</div>
-        <div class="cta__sub">A1, Viber, WhatsApp · г. Минск, пер. Ольшевского 7/9, пом. 109</div>
-      </div>
-      <div class="cta__btns">
-        <a href="tel:+375293227070" class="phone-btn phone-btn--call">📞 +375 (29) 322-70-70</a>
-        <a href="https://wa.me/375293227070" target="_blank" rel="noopener" class="phone-btn phone-btn--wa">WhatsApp</a>
-        <a href="viber://chat?number=%2B375293227070" class="phone-btn phone-btn--vb">Viber</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
   <footer class="footer">
     <div class="container footer__inner">
       <p>ИП Стадуб Василий Иванович · УНП 191847860 · Дата регистрации 10.01.2013г.</p>

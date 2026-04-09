@@ -1746,20 +1746,23 @@ img[loading="lazy"].loaded {
   overflow: hidden;
   position: relative;
   margin-top: 40px;
+  width: 100%;
 }
 
 .reviews__track {
   display: flex;
   transition: transform 0.5s cubic-bezier(.4,0,.2,1);
+  width: 100%;
 }
 
 .review-card {
+  width: 100%;
   min-width: 100%;
+  flex: 0 0 100%;
   background: var(--white);
   border-radius: var(--radius);
   padding: 32px;
   box-shadow: var(--shadow);
-  flex-shrink: 0;
   border-top: 3px solid var(--yellow);
   box-sizing: border-box;
 }

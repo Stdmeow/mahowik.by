@@ -133,17 +133,25 @@ const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 const mobileNavPopup = document.getElementById('mobileNavPopup');
 const mobileBar = document.querySelector('.mobile-bar');
 
-function toggleMenu() {
+function toggleMobileMenu() {
   if (mobileNavPopup) mobileNavPopup.classList.toggle('open');
   if (mobileMenuBtn) mobileMenuBtn.classList.toggle('open');
 }
 
-if (burger && navList) burger.addEventListener('click', () => {
-  navList.classList.toggle('open');
-  burger.classList.toggle('open');
-});
-if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
+if (burger && navList) {
+  burger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    navList.classList.toggle('open');
+    burger.classList.toggle('open');
+  });
+}
 
+if (mobileMenuBtn) {
+  mobileMenuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMobileMenu();
+  });
+}
 
 document.addEventListener('click', (e) => {
   if (mobileNavPopup && mobileNavPopup.classList.contains('open')) {
@@ -156,11 +164,15 @@ document.addEventListener('click', (e) => {
 
 
 const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-if (mobileNavPopup) {
-  mobileNavPopup.querySelectorAll('a').forEach(a => {
-    if (a.getAttribute('href') === currentPage) a.classList.add('active');
-  });
-}
+
+document.querySelectorAll('.nav__link, #mobileNavPopup a').forEach(link => {
+  const href = link.getAttribute('href');
+  if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+    link.classList.add('active');
+  } else {
+    link.classList.remove('active');
+  }
+});
 
 
 let lastScroll = 0;
@@ -190,7 +202,6 @@ document.querySelectorAll('.nav__link').forEach(link => {
   else link.classList.remove('active');
 });
 
-
 const progressBar = document.getElementById('progressBar');
 if (progressBar) {
   window.addEventListener('scroll', () => {
@@ -203,18 +214,18 @@ if (progressBar) {
 
 const pageTransition = document.getElementById('pageTransition');
 if (pageTransition) {
-  
   pageTransition.classList.add('slide-out');
   pageTransition.addEventListener('animationend', () => {
     pageTransition.style.display = 'none';
   }, { once: true });
 
-  
   document.querySelectorAll('a[href]').forEach(link => {
     const href = link.getAttribute('href');
     if (!href || href.startsWith('#') || href.startsWith('tel:') ||
         href.startsWith('http') || href.startsWith('viber') ||
         href.startsWith('mailto')) return;
+    if (link.closest('#mobileNavPopup') || link.closest('.nav__list') ||
+        link.closest('.mobile-bar')) return;
     link.addEventListener('click', e => {
       e.preventDefault();
       pageTransition.style.display = 'block';
@@ -411,34 +422,15 @@ if (reviewsTrack) {
   reviewsNext.addEventListener('click', () => goReview(rCurrent + 1));
 
   let rTouchX = 0;
-  let rTouchY = 0;
-  let rLocked = false;
-  let rMoved = false;
 
   reviewsTrack.addEventListener('touchstart', e => {
     rTouchX = e.touches[0].clientX;
-    rTouchY = e.touches[0].clientY;
-    rLocked = false;
-    rMoved = false;
   }, { passive: true });
 
-  reviewsTrack.addEventListener('touchmove', e => {
-    const dx = Math.abs(e.touches[0].clientX - rTouchX);
-    const dy = Math.abs(e.touches[0].clientY - rTouchY);
-    if (!rMoved) {
-      rMoved = true;
-      rLocked = dx > dy;
-    }
-    if (rLocked) e.preventDefault();
-  }, { passive: false });
-
   reviewsTrack.addEventListener('touchend', e => {
-    if (!rLocked) return;
     const diff = rTouchX - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 40) goReview(rCurrent + (diff > 0 ? 1 : -1));
-    rLocked = false;
-    rMoved = false;
-  });
+  }, { passive: true });
 }
 
 const workStatusEl = document.getElementById('workStatus');

@@ -1023,13 +1023,21 @@ img { max-width: 100%; display: block; }
 
   .nav__burger { display: flex; }
   .nav__list {
-    display: none;
+    display: flex;
     flex-direction: column;
     width: 100%;
     background: var(--dark2);
+    padding-bottom: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.35s cubic-bezier(.4,0,.2,1), opacity 0.3s ease, padding 0.3s ease;
+  }
+  .nav__list.open {
+    max-height: 400px;
+    opacity: 1;
     padding-bottom: 10px;
   }
-  .nav__list.open { display: flex; }
   .nav__link { padding: 12px 20px; }
 
   .stats__grid { grid-template-columns: 1fr 1fr; }
@@ -1753,6 +1761,8 @@ img[loading="lazy"].loaded {
   display: flex;
   transition: transform 0.5s cubic-bezier(.4,0,.2,1);
   width: 100%;
+  touch-action: pan-y;
+  user-select: none;
 }
 
 .review-card {

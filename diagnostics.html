@@ -35,14 +35,11 @@
         <button class="nav__burger" id="burger" aria-label="Меню">
           <span></span><span></span><span></span>
         </button>
-        <ul class="nav__list" id="navList">
-          <li class="stagger-item"><a href="index.html" class="nav__link">Главная</a></li>
-          <li class="stagger-item"><a href="diagnostics.html" class="nav__link active">Диагностика маховика</a></li>
-          <li class="stagger-item"><a href="repair.html" class="nav__link">Ремонт</a></li>
-          <li class="stagger-item"><a href="single.html" class="nav__link">Одномассовые</a></li>
-          <li class="stagger-item"><a href="contacts.html" class="nav__link">Контакты</a></li>
-          <li class="stagger-item"><a href="warranty.html" class="nav__link">Гарантия</a></li>
-        </ul>
+        
+    param($m)
+    $inner = $m.Groups[2].Value -replace '<a href=', '<a data-no-transition href='
+    $m.Groups[1].Value + $inner + $m.Groups[3].Value
+  
       </div>
     </nav>
   </header>
@@ -87,8 +84,10 @@
     </div>
   </footer>
 
-  <div class="mobile-nav-popup" id="mobileNavPopup">
-    <a href="index.html">Главная</a>
+  
+    param($m)
+    $m.Value -replace '<a href="', '<a data-no-transition href="'
+  
     <a href="diagnostics.html">Диагностика маховика</a>
     <a href="repair.html">Ремонт</a>
     <a href="single.html">Одномассовые</a>

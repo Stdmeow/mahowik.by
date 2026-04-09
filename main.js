@@ -138,7 +138,10 @@ function toggleMenu() {
   if (mobileMenuBtn) mobileMenuBtn.classList.toggle('open');
 }
 
-if (burger && navList) burger.addEventListener('click', () => navList.classList.toggle('open'));
+if (burger && navList) burger.addEventListener('click', () => {
+  navList.classList.toggle('open');
+  burger.classList.toggle('open');
+});
 if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
 
 // close popup on outside click
@@ -164,13 +167,16 @@ let lastScroll = 0;
 window.addEventListener('scroll', () => {
   const scrollY = window.scrollY;
   if (!mobileBar) return;
-  if (scrollY < 50) {
-    mobileBar.classList.remove('hidden');
+  if (scrollY <= 10) {
+    // самый верх — скрыть бар
+    mobileBar.classList.add('hidden');
   } else if (scrollY < lastScroll) {
+    // скролл вверх — скрыть
     mobileBar.classList.add('hidden');
     if (mobileNavPopup) mobileNavPopup.classList.remove('open');
     if (mobileMenuBtn) mobileMenuBtn.classList.remove('open');
   } else {
+    // скролл вниз — показать
     mobileBar.classList.remove('hidden');
   }
   lastScroll = scrollY;

@@ -1474,6 +1474,8 @@ body { font-size: 16px; }
   .mobile-nav-popup {
     display: block;
   }
+
+  .mobile-bar {
     display: flex;
     position: fixed;
     bottom: 0; left: 0; right: 0;
@@ -1556,12 +1558,12 @@ body { font-size: 16px; }
     bottom: 70px;
     right: 12px;
     background: var(--dark2);
-    border: 1px solid rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
     border-radius: 14px;
     padding: 8px;
-    z-index: 199;
-    min-width: 220px;
-    box-shadow: 0 -8px 32px rgba(0,0,0,0.4);
+    z-index: 9999;
+    min-width: 240px;
+    box-shadow: 0 -8px 32px rgba(0,0,0,0.6);
     transform: translateY(20px) scale(0.92);
     opacity: 0;
     pointer-events: none;
@@ -1577,13 +1579,14 @@ body { font-size: 16px; }
 
   .mobile-nav-popup a {
     display: block;
-    padding: 12px 16px;
-    color: #ddd;
+    padding: 14px 18px;
+    color: #fff;
     font-family: var(--font-main);
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 1rem;
     border-radius: 10px;
     transition: var(--transition);
+    text-decoration: none;
   }
 
   .mobile-nav-popup a:hover,

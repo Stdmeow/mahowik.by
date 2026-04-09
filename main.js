@@ -296,7 +296,7 @@ const counterObserver = new IntersectionObserver((entries) => {
     const el = entry.target;
     const raw = el.dataset.count;
     if (!raw) return;
-    animateCounter(el, parseInt(raw), 2500);
+    animateCounter(el, parseInt(raw), 1500);
     counterObserver.unobserve(el);
   });
 }, { threshold: 0.5 });
@@ -362,3 +362,22 @@ if (canvas) {
   }
   drawParticles();
 }
+
+const backToTop = document.getElementById('backToTop');
+if (backToTop) {
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 400) backToTop.classList.add('visible');
+    else backToTop.classList.remove('visible');
+  }, { passive: true });
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+  if (img.complete) {
+    img.classList.add('loaded');
+  } else {
+    img.addEventListener('load', () => img.classList.add('loaded'));
+  }
+});

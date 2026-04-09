@@ -1458,6 +1458,9 @@ body { font-size: 16px; }
 .mobile-bar {
   display: none;
 }
+.mobile-nav-popup {
+  display: none;
+}
 
 @media (max-width: 900px) {
   .mobile-bar {
@@ -1649,4 +1652,76 @@ body { font-size: 16px; }
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  background: var(--yellow);
+  color: var(--dark);
+  border: none;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(245,168,0,0.4);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.back-to-top:hover {
+  background: var(--yellow-dark);
+  transform: translateY(-3px);
+}
+
+@media (min-width: 901px) {
+  .back-to-top { bottom: 30px; }
+}
+
+.badge-13 {
+  position: fixed;
+  bottom: 100px;
+  left: 20px;
+  width: 72px;
+  height: 72px;
+  z-index: 150;
+  pointer-events: none;
+  animation: badge-spin 12s linear infinite;
+}
+
+@media (min-width: 901px) {
+  .badge-13 { bottom: 40px; width: 80px; height: 80px; }
+}
+
+@keyframes badge-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.badge-13 svg {
+  width: 100%;
+  height: 100%;
+}
+
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+img[loading="lazy"].loaded {
+  opacity: 1;
 }

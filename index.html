@@ -91,14 +91,14 @@
       <h2 class="section-title text-center animate-up">Наши работы</h2>
       <div class="slider animate-up delay-1">
         <div class="slider__track" id="sliderTrack">
-          <div class="slider__slide" data-index="0"><img src="images/work1.jpg" alt="Рено 1.9dci"><div class="slider__caption">Рено 1.9dci</div></div>
-          <div class="slider__slide" data-index="1"><img src="images/work2.jpg" alt="Обменный фонд маховиков"><div class="slider__caption">Обменный фонд маховиков</div></div>
-          <div class="slider__slide" data-index="2"><img src="images/work3.jpg" alt="Двухмассовый маховик"><div class="slider__caption">Двухмассовый маховик</div></div>
-          <div class="slider__slide" data-index="3"><img src="images/work4.jpg" alt="Новые европейские комплектующие"><div class="slider__caption">Новые европейские комплектующие</div></div>
-          <div class="slider__slide" data-index="4"><img src="images/work5.jpg" alt="Новые европейские комплектующие"><div class="slider__caption">Новые европейские комплектующие</div></div>
-          <div class="slider__slide" data-index="5"><img src="images/work6.jpg" alt="Пружины маховика"><div class="slider__caption">Пружины маховика</div></div>
-          <div class="slider__slide" data-index="6"><img src="images/work7.jpg" alt="Процесс балансировки"><div class="slider__caption">Процесс балансировки</div></div>
-          <div class="slider__slide" data-index="7"><img src="images/work8.jpg" alt="Балансировка окончена"><div class="slider__caption">Балансировка окончена</div></div>
+          <div class="slider__slide" data-index="0"><img loading="lazy" src="images/work1.jpg" alt="Рено 1.9dci"><div class="slider__caption">Рено 1.9dci</div></div>
+          <div class="slider__slide" data-index="1"><img loading="lazy" src="images/work2.jpg" alt="Обменный фонд маховиков"><div class="slider__caption">Обменный фонд маховиков</div></div>
+          <div class="slider__slide" data-index="2"><img loading="lazy" src="images/work3.jpg" alt="Двухмассовый маховик"><div class="slider__caption">Двухмассовый маховик</div></div>
+          <div class="slider__slide" data-index="3"><img loading="lazy" src="images/work4.jpg" alt="Новые европейские комплектующие"><div class="slider__caption">Новые европейские комплектующие</div></div>
+          <div class="slider__slide" data-index="4"><img loading="lazy" src="images/work5.jpg" alt="Новые европейские комплектующие"><div class="slider__caption">Новые европейские комплектующие</div></div>
+          <div class="slider__slide" data-index="5"><img loading="lazy" src="images/work6.jpg" alt="Пружины маховика"><div class="slider__caption">Пружины маховика</div></div>
+          <div class="slider__slide" data-index="6"><img loading="lazy" src="images/work7.jpg" alt="Процесс балансировки"><div class="slider__caption">Процесс балансировки</div></div>
+          <div class="slider__slide" data-index="7"><img loading="lazy" src="images/work8.jpg" alt="Балансировка окончена"><div class="slider__caption">Балансировка окончена</div></div>
         </div>
         <button class="slider__btn slider__btn--prev" id="sliderPrev" aria-label="Назад">&#8592;</button>
         <button class="slider__btn slider__btn--next" id="sliderNext" aria-label="Вперёд">&#8594;</button>
@@ -196,6 +196,20 @@
     <button class="mobile-bar__menu" id="mobileMenuBtn" aria-label="Меню">
       <span></span><span></span><span></span>
     </button>
+  </div>
+  <button class="back-to-top" id="backToTop" aria-label="Наверх">&#8593;</button>
+  <div class="badge-13" title="13 лет опыта">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <path id="circle" d="M 50,50 m -30,0 a 30,30 0 1,1 60,0 a 30,30 0 1,1 -60,0"/>
+      </defs>
+      <circle cx="50" cy="50" r="46" fill="#f5a800" stroke="#d48f00" stroke-width="2"/>
+      <circle cx="50" cy="50" r="36" fill="#1a1a2e"/>
+      <text font-family="Montserrat,sans-serif" font-weight="900" fill="#f5a800" font-size="22" text-anchor="middle" x="50" y="57">13</text>
+      <text>
+        <textPath href="#circle" startOffset="10%" font-family="Montserrat,sans-serif" font-weight="700" fill="#1a1a2e" font-size="10.5" letter-spacing="1">ЛЕТ ОПЫТА • ЛЕТ ОПЫТА •</textPath>
+      </text>
+    </svg>
   </div>
   <script src="main.js"></script>
 </body>

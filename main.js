@@ -130,13 +130,53 @@ if (track) {
 const burger = document.getElementById('burger');
 const navList = document.getElementById('navList');
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mobileNavPopup = document.getElementById('mobileNavPopup');
+const mobileBar = document.querySelector('.mobile-bar');
 
 function toggleMenu() {
-  if (navList) navList.classList.toggle('open');
+  if (mobileNavPopup) mobileNavPopup.classList.toggle('open');
+  if (mobileMenuBtn) mobileMenuBtn.classList.toggle('open');
 }
 
-if (burger) burger.addEventListener('click', toggleMenu);
-if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMenu);
+if (burger && navList) burger.addEventListener('click', () => navList.classList.toggle('open'));
+if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
+
+// close popup on outside click
+document.addEventListener('click', (e) => {
+  if (mobileNavPopup && mobileNavPopup.classList.contains('open')) {
+    if (!mobileNavPopup.contains(e.target) && e.target !== mobileMenuBtn) {
+      mobileNavPopup.classList.remove('open');
+      if (mobileMenuBtn) mobileMenuBtn.classList.remove('open');
+    }
+  }
+});
+
+// highlight active link in popup
+const current = window.location.pathname.split('/').pop() || 'index.html';
+if (mobileNavPopup) {
+  mobileNavPopup.querySelectorAll('a').forEach(a => {
+    if (a.getAttribute('href') === current) a.classList.add('active');
+  });
+}
+
+// hide bar on scroll up, show on scroll down
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  if (!mobileBar) return;
+  if (scrollY < 50) {
+    mobileBar.classList.remove('hidden');
+  } else if (scrollY < lastScroll) {
+    // scrolling up — hide
+    mobileBar.classList.add('hidden');
+    if (mobileNavPopup) mobileNavPopup.classList.remove('open');
+    if (mobileMenuBtn) mobileMenuBtn.classList.remove('open');
+  } else {
+    // scrolling down — show
+    mobileBar.classList.remove('hidden');
+  }
+  lastScroll = scrollY;
+}, { passive: true });
 
 // Active nav link
 const links = document.querySelectorAll('.nav__link');

@@ -151,11 +151,11 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// highlight active link in popup
-const current = window.location.pathname.split('/').pop() || 'index.html';
+// highlight active link in popup + nav
+const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 if (mobileNavPopup) {
   mobileNavPopup.querySelectorAll('a').forEach(a => {
-    if (a.getAttribute('href') === current) a.classList.add('active');
+    if (a.getAttribute('href') === currentPage) a.classList.add('active');
   });
 }
 
@@ -167,22 +167,17 @@ window.addEventListener('scroll', () => {
   if (scrollY < 50) {
     mobileBar.classList.remove('hidden');
   } else if (scrollY < lastScroll) {
-    // scrolling up — hide
     mobileBar.classList.add('hidden');
     if (mobileNavPopup) mobileNavPopup.classList.remove('open');
     if (mobileMenuBtn) mobileMenuBtn.classList.remove('open');
   } else {
-    // scrolling down — show
     mobileBar.classList.remove('hidden');
   }
   lastScroll = scrollY;
 }, { passive: true });
 
 // Active nav link
-const links = document.querySelectorAll('.nav__link');
-const current = window.location.pathname.split('/').pop() || 'index.html';
-links.forEach(link => {
-  const href = link.getAttribute('href');
-  if (href === current) link.classList.add('active');
+document.querySelectorAll('.nav__link').forEach(link => {
+  if (link.getAttribute('href') === currentPage) link.classList.add('active');
   else link.classList.remove('active');
 });

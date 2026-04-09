@@ -411,11 +411,29 @@ if (reviewsTrack) {
   reviewsNext.addEventListener('click', () => goReview(rCurrent + 1));
 
   let rTouchX = 0;
-  reviewsTrack.addEventListener('touchstart', e => { rTouchX = e.touches[0].clientX; }, { passive: true });
+  let rTouchY = 0;
+  let rLocked = false;
+
+  reviewsTrack.addEventListener('touchstart', e => {
+    rTouchX = e.touches[0].clientX;
+    rTouchY = e.touches[0].clientY;
+    rLocked = false;
+  }, { passive: true });
+
+  reviewsTrack.addEventListener('touchmove', e => {
+    const dx = Math.abs(e.touches[0].clientX - rTouchX);
+    const dy = Math.abs(e.touches[0].clientY - rTouchY);
+    if (!rLocked) {
+      if (dx > dy && dx > 8) {
+        rLocked = true;
+      }
+    }
+    if (rLocked) e.preventDefault();
+  }, { passive: false });
+
   reviewsTrack.addEventListener('touchend', e => {
     const diff = rTouchX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 40) goReview(rCurrent + (diff > 0 ? 1 : -1));
+    if (rLocked && Math.abs(diff) > 40) goReview(rCurrent + (diff > 0 ? 1 : -1));
+    rLocked = false;
   });
-
-  setInterval(() => goReview(rCurrent + 1), 5000);
 }

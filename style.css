@@ -1286,3 +1286,106 @@ img { max-width: 100%; display: block; }
   .phone-btns { justify-content: flex-start; gap: 6px; }
   .phone-btn { font-size: 0.72rem; padding: 6px 10px; }
 }
+
+/* ===== CTA CONTACTS STRIP ===== */
+.cta {
+  background: linear-gradient(135deg, var(--yellow) 0%, var(--yellow-dark) 100%);
+  padding: 40px 0;
+}
+
+.cta__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.cta__title {
+  font-family: var(--font-main);
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: var(--dark);
+  margin-bottom: 4px;
+}
+
+.cta__sub {
+  font-size: 0.9rem;
+  color: rgba(0,0,0,0.65);
+}
+
+.cta__btns {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* override phone-btn on yellow bg */
+.cta .phone-btn--call {
+  background: var(--dark);
+  color: var(--white);
+}
+.cta .phone-btn--call:hover { background: #000; }
+
+/* ===== READABILITY IMPROVEMENTS ===== */
+
+/* darker body text */
+body { color: #222; }
+
+/* stronger paragraph text */
+.about__text p,
+.step__body p,
+.diag-card p,
+.diag-card li,
+.adv-card p,
+.single-content p,
+.warranty-list li,
+.contacts-info p {
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+/* highlight cards text */
+.highlight__card p { color: #eee; font-size: 1.02rem; }
+.highlight__card--accent p { color: #fff; font-size: 1.08rem; }
+.highlight__note { color: #ccc; font-size: 0.95rem; }
+
+/* stat cards */
+.stat-card__value { font-size: 1.4rem; color: #111; }
+.stat-card__label { font-size: 0.88rem; color: #444; }
+
+/* workhours */
+.workhours__row { color: #ddd; font-size: 1rem; }
+.workhours__row span:last-child { color: #fff; font-size: 1rem; font-weight: 700; }
+.workhours__address { color: #bbb; font-size: 0.92rem; }
+
+/* nav links */
+.nav__link { font-size: 0.78rem; color: #ddd; }
+.nav__link:hover, .nav__link.active { color: var(--yellow); }
+
+/* logo */
+.logo__title { font-size: 1rem; }
+.logo__sub { font-size: 0.82rem; color: #bbb; }
+
+/* section titles */
+.section-title { color: #111; }
+
+/* adv card number */
+.adv-card__num { color: rgba(245,168,0,0.35); }
+
+/* step number */
+.step__num { color: var(--yellow); }
+.step__body h3 { color: #111; font-size: 1.05rem; }
+
+/* diag card title */
+.diag-card h3 { font-size: 1.05rem; }
+
+/* footer */
+.footer__inner p { color: #aaa; font-size: 0.85rem; }
+.footer__inner a { color: var(--yellow); }
+
+@media (max-width: 640px) {
+  .cta__inner { flex-direction: column; align-items: flex-start; }
+  .cta__title { font-size: 1.15rem; }
+}

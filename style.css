@@ -2052,3 +2052,9 @@ img[loading="lazy"].loaded {
   .hero__scroll { display: none; }
   .hero__content { padding-bottom: 40px; }
 }
+
+[data-count] {
+  display: inline-block;
+  min-width: 3.5ch;
+  text-align: right;
+}

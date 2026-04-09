@@ -148,6 +148,7 @@ if (burger && navList) {
 
 if (mobileMenuBtn) {
   mobileMenuBtn.addEventListener('click', (e) => {
+    e.preventDefault();
     e.stopPropagation();
     toggleMobileMenu();
   });
@@ -163,17 +164,16 @@ document.addEventListener('click', (e) => {
 });
 
 
-const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+const currentPage = (function() {
+  const parts = window.location.pathname.split('/');
+  const last = parts[parts.length - 1];
+  return last === '' || last === 'mahowik.by' ? 'index.html' : last;
+})();
 
 document.querySelectorAll('.nav__link, #mobileNavPopup a').forEach(link => {
-  const href = link.getAttribute('href');
-  if (href === currentPage || (currentPage === '' && href === 'index.html')) {
-    link.classList.add('active');
-  } else {
-    link.classList.remove('active');
-  }
+  link.classList.remove('active');
+  if (link.getAttribute('href') === currentPage) link.classList.add('active');
 });
-
 
 let lastScroll = 0;
 const header = document.querySelector('.header');
@@ -196,11 +196,6 @@ window.addEventListener('scroll', () => {
   lastScroll = scrollY;
 }, { passive: true });
 
-
-document.querySelectorAll('.nav__link').forEach(link => {
-  if (link.getAttribute('href') === currentPage) link.classList.add('active');
-  else link.classList.remove('active');
-});
 
 const progressBar = document.getElementById('progressBar');
 if (progressBar) {

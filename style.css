@@ -11,8 +11,8 @@
   --white: #ffffff;
   --text: #333344;
   --accent: #e63946;
-  --font-main: 'Montserrat', sans-serif;
-  --font-body: 'Open Sans', sans-serif;
+  --font-main: 'Oswald', sans-serif;
+  --font-body: 'Roboto', sans-serif;
   --radius: 12px;
   --shadow: 0 8px 32px rgba(0,0,0,0.12);
   --transition: 0.35s cubic-bezier(.4,0,.2,1);
@@ -1389,3 +1389,46 @@ body { color: #222; }
   .cta__inner { flex-direction: column; align-items: flex-start; }
   .cta__title { font-size: 1.15rem; }
 }
+
+/* ===== FONT SIZE BOOST ===== */
+body { font-size: 16px; }
+
+.nav__link { font-size: 0.85rem; letter-spacing: 0.08em; }
+
+.logo__title { font-size: 1.05rem; letter-spacing: 0.02em; }
+.logo__sub { font-size: 0.85rem; }
+
+.hero__title { font-size: clamp(2.4rem, 6vw, 3.8rem); letter-spacing: 0.03em; }
+.hero__sub { font-size: 1.15rem; }
+
+.section-title { font-size: clamp(1.6rem, 3.5vw, 2.2rem); letter-spacing: 0.04em; }
+
+.stat-card__value { font-size: 1.5rem; letter-spacing: 0.02em; }
+.stat-card__label { font-size: 0.92rem; }
+
+.adv-card p,
+.step__body p,
+.diag-card p,
+.diag-card li,
+.about__text p,
+.single-content p,
+.warranty-list li,
+.contacts-info p { font-size: 1rem; }
+
+.step__body h3 { font-size: 1.1rem; letter-spacing: 0.06em; }
+.diag-card h3 { font-size: 1.1rem; letter-spacing: 0.04em; }
+
+.highlight__card p { font-size: 1.08rem; }
+.highlight__card--accent p { font-size: 1.15rem; }
+
+.workhours__title { font-size: 1.6rem; letter-spacing: 0.04em; }
+.workhours__row { font-size: 1.05rem; }
+
+.cta__title { font-size: 1.6rem; letter-spacing: 0.04em; }
+.cta__sub { font-size: 0.95rem; }
+
+.phone-btn { font-size: 0.85rem; padding: 9px 18px; }
+
+.service-btn { font-size: 1rem; }
+
+.adv-card__num { font-size: 3rem; }

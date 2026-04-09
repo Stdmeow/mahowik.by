@@ -429,35 +429,27 @@ if (reviewsTrack) {
 }
 
 const workStatusEl = document.getElementById('workStatus');
-if (workStatusEl) {
-  function updateStatus() {
-    const now = new Date();
-    const day = now.getDay();
-    const h = now.getHours();
-    const m = now.getMinutes();
-    const time = h * 60 + m;
+const workStatusHero = document.getElementById('workStatusHero');
 
-    let open = false;
-    let closeTime = '';
-
-    if (day >= 1 && day <= 4) {
-      open = time >= 9*60+30 && time < 17*60+30;
-      closeTime = 'до 17:30';
-    } else if (day === 5) {
-      open = time >= 9*60+30 && time < 16*60+30;
-      closeTime = 'до 16:30';
-    }
-
-    if (open) {
-      workStatusEl.innerHTML = `<div class="work-status work-status--open"><span class="work-status__dot"></span>Работаем сейчас ${closeTime}</div>`;
-    } else {
-      const nextDay = (day === 5 || day === 6 || day === 0) ? 'Пн в 9:30' : 'завтра в 9:30';
-      workStatusEl.innerHTML = `<div class="work-status work-status--closed"><span class="work-status__dot"></span>Закрыто · Откроемся ${nextDay}</div>`;
-    }
-  }
-  updateStatus();
-  setInterval(updateStatus, 60000);
+function getWorkStatusHTML() {
+  const now = new Date();
+  const day = now.getDay();
+  const time = now.getHours() * 60 + now.getMinutes();
+  let open = false, closeTime = '';
+  if (day >= 1 && day <= 4) { open = time >= 570 && time < 1050; closeTime = 'до 17:30'; }
+  else if (day === 5) { open = time >= 570 && time < 990; closeTime = 'до 16:30'; }
+  if (open) return `<div class="work-status work-status--open"><span class="work-status__dot"></span>Работаем сейчас ${closeTime}</div>`;
+  const next = (day === 5 || day === 6 || day === 0) ? 'Пн в 9:30' : 'завтра в 9:30';
+  return `<div class="work-status work-status--closed"><span class="work-status__dot"></span>Закрыто · Откроемся ${next}</div>`;
 }
+
+function updateAllStatuses() {
+  const html = getWorkStatusHTML();
+  if (workStatusEl) workStatusEl.innerHTML = html;
+  if (workStatusHero) workStatusHero.innerHTML = html;
+}
+updateAllStatuses();
+setInterval(updateAllStatuses, 60000);
 
 const staggerObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {

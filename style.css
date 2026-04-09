@@ -186,8 +186,8 @@ img { max-width: 100%; display: block; }
 .phone-btns {
   display: flex;
   gap: 8px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 .phone-btn {
@@ -243,6 +243,8 @@ img { max-width: 100%; display: block; }
 .nav {
   background: var(--dark2);
   border-bottom: 2px solid var(--yellow);
+  position: relative;
+  z-index: 10;
 }
 
 .nav .container {
@@ -1032,6 +1034,8 @@ img { max-width: 100%; display: block; }
     overflow: hidden;
     opacity: 0;
     transition: max-height 0.35s cubic-bezier(.4,0,.2,1), opacity 0.3s ease, padding 0.3s ease;
+    position: relative;
+    z-index: 10;
   }
   .nav__list.open {
     max-height: 400px;
@@ -1471,6 +1475,8 @@ body { font-size: 16px; }
 }
 
 @media (max-width: 900px) {
+  .phone-btns { display: none; }
+
   .mobile-nav-popup {
     display: block;
   }
@@ -1555,20 +1561,20 @@ body { font-size: 16px; }
   
   .mobile-nav-popup {
     position: fixed;
-    bottom: 70px;
+    bottom: 80px;
+    left: 12px;
     right: 12px;
     background: var(--dark2);
     border: 1px solid rgba(255,255,255,0.2);
     border-radius: 14px;
     padding: 8px;
     z-index: 9999;
-    min-width: 240px;
     box-shadow: 0 -8px 32px rgba(0,0,0,0.6);
-    transform: translateY(20px) scale(0.92);
+    transform: translateY(20px) scale(0.95);
     opacity: 0;
     pointer-events: none;
     transition: transform 0.28s cubic-bezier(.4,0,.2,1), opacity 0.28s ease;
-    transform-origin: bottom right;
+    transform-origin: bottom center;
   }
 
   .mobile-nav-popup.open {

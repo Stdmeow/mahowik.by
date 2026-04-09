@@ -413,28 +413,31 @@ if (reviewsTrack) {
   let rTouchX = 0;
   let rTouchY = 0;
   let rLocked = false;
+  let rMoved = false;
 
   reviewsTrack.addEventListener('touchstart', e => {
     rTouchX = e.touches[0].clientX;
     rTouchY = e.touches[0].clientY;
     rLocked = false;
+    rMoved = false;
   }, { passive: true });
 
   reviewsTrack.addEventListener('touchmove', e => {
     const dx = Math.abs(e.touches[0].clientX - rTouchX);
     const dy = Math.abs(e.touches[0].clientY - rTouchY);
-    if (!rLocked) {
-      if (dx > dy && dx > 8) {
-        rLocked = true;
-      }
+    if (!rMoved) {
+      rMoved = true;
+      rLocked = dx > dy;
     }
     if (rLocked) e.preventDefault();
   }, { passive: false });
 
   reviewsTrack.addEventListener('touchend', e => {
+    if (!rLocked) return;
     const diff = rTouchX - e.changedTouches[0].clientX;
-    if (rLocked && Math.abs(diff) > 40) goReview(rCurrent + (diff > 0 ? 1 : -1));
+    if (Math.abs(diff) > 40) goReview(rCurrent + (diff > 0 ? 1 : -1));
     rLocked = false;
+    rMoved = false;
   });
 }
 

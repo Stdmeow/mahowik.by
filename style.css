@@ -1557,9 +1557,15 @@ body { font-size: 16px; }
 
   .mobile-bar__contacts {
     display: flex;
-    gap: 8px;
+    flex-direction: column;
+    gap: 10px;
     flex: 1;
-    flex-wrap: wrap;
+  }
+
+  .mobile-bar__messengers {
+    display: flex;
+    gap: 10px;
+    align-items: center;
   }
 
   .mobile-bar__btn {

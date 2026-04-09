@@ -164,17 +164,23 @@ if (mobileNavPopup) {
 
 
 let lastScroll = 0;
+const header = document.querySelector('.header');
+
 window.addEventListener('scroll', () => {
   const scrollY = window.scrollY;
   if (!mobileBar) return;
-  const heroHeight = document.querySelector('.hero') ? document.querySelector('.hero').offsetHeight : 300;
-  if (scrollY <= heroHeight) {
-    mobileBar.classList.remove('visible');
-    if (mobileNavPopup) mobileNavPopup.classList.remove('open');
-    if (mobileMenuBtn) mobileMenuBtn.classList.remove('open');
-  } else if (scrollY > lastScroll) {
-    mobileBar.classList.add('visible');
+
+  if (header) {
+    const headerBottom = header.getBoundingClientRect().bottom;
+    if (headerBottom > 0) {
+      mobileBar.classList.remove('visible');
+      if (mobileNavPopup) mobileNavPopup.classList.remove('open');
+      if (mobileMenuBtn) mobileMenuBtn.classList.remove('open');
+    } else {
+      mobileBar.classList.add('visible');
+    }
   }
+
   lastScroll = scrollY;
 }, { passive: true });
 
@@ -275,9 +281,11 @@ function animateCounter(el, target, duration) {
   const update = (now) => {
     const elapsed = now - start;
     const progress = Math.min(elapsed / duration, 1);
-    const ease = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.round(ease * target).toLocaleString('ru');
+    const ease = 1 - Math.pow(1 - progress, 4);
+    const val = Math.round(ease * target);
+    el.textContent = val.toLocaleString('ru');
     if (progress < 1) requestAnimationFrame(update);
+    else el.textContent = target.toLocaleString('ru');
   };
   requestAnimationFrame(update);
 }
@@ -288,7 +296,7 @@ const counterObserver = new IntersectionObserver((entries) => {
     const el = entry.target;
     const raw = el.dataset.count;
     if (!raw) return;
-    animateCounter(el, parseInt(raw), 1800);
+    animateCounter(el, parseInt(raw), 2500);
     counterObserver.unobserve(el);
   });
 }, { threshold: 0.5 });

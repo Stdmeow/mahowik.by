@@ -1,4 +1,4 @@
-// Intersection Observer for scroll animations
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -10,7 +10,7 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.animate-up, .animate-fade, .animate-left, .animate-right')
   .forEach(el => observer.observe(el));
 
-// ===== SLIDER + LIGHTBOX =====
+
 const track = document.getElementById('sliderTrack');
 const prevBtn = document.getElementById('sliderPrev');
 const nextBtn = document.getElementById('sliderNext');
@@ -27,14 +27,14 @@ if (track) {
   let current = 0;
   let autoTimer;
 
-  // collect slide data
+  
   const slideData = Array.from(slides).map(s => ({
     src: s.querySelector('img').src,
     alt: s.querySelector('img').alt,
     caption: s.querySelector('.slider__caption') ? s.querySelector('.slider__caption').textContent : ''
   }));
 
-  // create dots
+  
   slides.forEach((_, i) => {
     const dot = document.createElement('button');
     dot.className = 'slider__dot' + (i === 0 ? ' active' : '');
@@ -57,7 +57,7 @@ if (track) {
   prevBtn.addEventListener('click', () => { goTo(current - 1); resetAuto(); });
   nextBtn.addEventListener('click', () => { goTo(current + 1); resetAuto(); });
 
-  // touch swipe on slider
+  
   let touchStartX = 0;
   track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
   track.addEventListener('touchend', e => {
@@ -65,14 +65,14 @@ if (track) {
     if (Math.abs(diff) > 40) { goTo(current + (diff > 0 ? 1 : -1)); resetAuto(); }
   });
 
-  // click slide → open lightbox
+  
   slides.forEach((slide, i) => {
     slide.addEventListener('click', () => openLightbox(i));
   });
 
   startAuto();
 
-  // ===== LIGHTBOX =====
+  
   let lbCurrent = 0;
 
   function openLightbox(index) {
@@ -106,7 +106,7 @@ if (track) {
     updateLightbox();
   });
 
-  // keyboard navigation
+  
   document.addEventListener('keydown', e => {
     if (!lightbox.classList.contains('open')) return;
     if (e.key === 'Escape') closeLightbox();
@@ -114,7 +114,7 @@ if (track) {
     if (e.key === 'ArrowRight') { lbCurrent = (lbCurrent + 1) % slideData.length; updateLightbox(); }
   });
 
-  // touch swipe on lightbox
+  
   let lbTouchX = 0;
   lightbox.addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
   lightbox.addEventListener('touchend', e => {
@@ -126,7 +126,7 @@ if (track) {
   });
 }
 
-// Mobile burger menu
+
 const burger = document.getElementById('burger');
 const navList = document.getElementById('navList');
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -144,7 +144,7 @@ if (burger && navList) burger.addEventListener('click', () => {
 });
 if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
 
-// close popup on outside click
+
 document.addEventListener('click', (e) => {
   if (mobileNavPopup && mobileNavPopup.classList.contains('open')) {
     if (!mobileNavPopup.contains(e.target) && e.target !== mobileMenuBtn) {
@@ -154,7 +154,7 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// highlight active link in popup + nav
+
 const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 if (mobileNavPopup) {
   mobileNavPopup.querySelectorAll('a').forEach(a => {
@@ -162,33 +162,29 @@ if (mobileNavPopup) {
   });
 }
 
-// hide bar on scroll up, show on scroll down
+
 let lastScroll = 0;
 window.addEventListener('scroll', () => {
   const scrollY = window.scrollY;
   if (!mobileBar) return;
-  if (scrollY <= 10) {
-    // самый верх — скрыть бар
-    mobileBar.classList.add('hidden');
-  } else if (scrollY < lastScroll) {
-    // скролл вверх — скрыть
-    mobileBar.classList.add('hidden');
+  const heroHeight = document.querySelector('.hero') ? document.querySelector('.hero').offsetHeight : 300;
+  if (scrollY <= heroHeight) {
+    mobileBar.classList.remove('visible');
     if (mobileNavPopup) mobileNavPopup.classList.remove('open');
     if (mobileMenuBtn) mobileMenuBtn.classList.remove('open');
-  } else {
-    // скролл вниз — показать
-    mobileBar.classList.remove('hidden');
+  } else if (scrollY > lastScroll) {
+    mobileBar.classList.add('visible');
   }
   lastScroll = scrollY;
 }, { passive: true });
 
-// Active nav link
+
 document.querySelectorAll('.nav__link').forEach(link => {
   if (link.getAttribute('href') === currentPage) link.classList.add('active');
   else link.classList.remove('active');
 });
 
-// ===== PROGRESS BAR =====
+
 const progressBar = document.getElementById('progressBar');
 if (progressBar) {
   window.addEventListener('scroll', () => {
@@ -198,16 +194,16 @@ if (progressBar) {
   }, { passive: true });
 }
 
-// ===== PAGE TRANSITIONS =====
+
 const pageTransition = document.getElementById('pageTransition');
 if (pageTransition) {
-  // slide out on load
+  
   pageTransition.classList.add('slide-out');
   pageTransition.addEventListener('animationend', () => {
     pageTransition.style.display = 'none';
   }, { once: true });
 
-  // slide in on link click
+  
   document.querySelectorAll('a[href]').forEach(link => {
     const href = link.getAttribute('href');
     if (!href || href.startsWith('#') || href.startsWith('tel:') ||
@@ -225,7 +221,7 @@ if (pageTransition) {
   });
 }
 
-// ===== PARALLAX HERO =====
+
 const heroBg = document.querySelector('.hero__bg');
 if (heroBg) {
   window.addEventListener('scroll', () => {
@@ -234,7 +230,7 @@ if (heroBg) {
   }, { passive: true });
 }
 
-// ===== TYPING EFFECT =====
+
 const heroTitle = document.getElementById('heroTitle');
 if (heroTitle) {
   const lines = ['Ремонт маховиков', 'в Беларуси'];
@@ -273,7 +269,7 @@ if (heroTitle) {
   setTimeout(typeNext, 600);
 }
 
-// ===== COUNTER ANIMATION =====
+
 function animateCounter(el, target, duration) {
   const start = performance.now();
   const update = (now) => {
@@ -299,7 +295,7 @@ const counterObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
 
-// ===== PARTICLES =====
+
 const canvas = document.getElementById('particles-canvas');
 if (canvas) {
   const ctx = canvas.getContext('2d');
@@ -338,7 +334,7 @@ if (canvas) {
       ctx.fillStyle = `rgba(245,168,0,${p.o})`;
       ctx.fill();
     });
-    // draw connecting lines
+    
     for (let i = 0; i < particles.length; i++) {
       for (let j = i + 1; j < particles.length; j++) {
         const dx = particles[i].x - particles[j].x;

@@ -381,3 +381,58 @@ document.querySelectorAll('img[loading="lazy"]').forEach(img => {
     img.addEventListener('load', () => img.classList.add('loaded'));
   }
 });
+
+const reviewsTrack = document.getElementById('reviewsTrack');
+const reviewsDots = document.getElementById('reviewsDots');
+const reviewsPrev = document.getElementById('reviewsPrev');
+const reviewsNext = document.getElementById('reviewsNext');
+
+if (reviewsTrack) {
+  const cards = reviewsTrack.querySelectorAll('.review-card');
+  let rCurrent = 0;
+
+  function getVisible() {
+    if (window.innerWidth < 600) return 1;
+    if (window.innerWidth < 900) return 2;
+    return 3;
+  }
+
+  function totalSlides() {
+    return Math.ceil(cards.length / getVisible());
+  }
+
+  function buildDots() {
+    reviewsDots.innerHTML = '';
+    for (let i = 0; i < totalSlides(); i++) {
+      const d = document.createElement('button');
+      d.className = 'reviews__dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => goReview(i));
+      reviewsDots.appendChild(d);
+    }
+  }
+
+  function goReview(index) {
+    rCurrent = (index + totalSlides()) % totalSlides();
+    const visible = getVisible();
+    const cardWidth = reviewsTrack.parentElement.offsetWidth;
+    const gap = 24;
+    const slideWidth = (cardWidth - gap * (visible - 1)) / visible + gap;
+    reviewsTrack.style.transform = `translateX(-${rCurrent * visible * slideWidth}px)`;
+    reviewsDots.querySelectorAll('.reviews__dot').forEach((d, i) => {
+      d.classList.toggle('active', i === rCurrent);
+    });
+  }
+
+  buildDots();
+  window.addEventListener('resize', () => { buildDots(); goReview(0); });
+
+  reviewsPrev.addEventListener('click', () => goReview(rCurrent - 1));
+  reviewsNext.addEventListener('click', () => goReview(rCurrent + 1));
+
+  let rTouchX = 0;
+  reviewsTrack.addEventListener('touchstart', e => { rTouchX = e.touches[0].clientX; }, { passive: true });
+  reviewsTrack.addEventListener('touchend', e => {
+    const diff = rTouchX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) goReview(rCurrent + (diff > 0 ? 1 : -1));
+  });
+}

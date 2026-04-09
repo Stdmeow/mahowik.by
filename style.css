@@ -41,11 +41,7 @@ img { max-width: 100%; display: block; }
 }
 
 /* ===== HEADER ===== */
-.header { position: sticky; top: 0; z-index: 100; }
-
-@media (max-width: 900px) {
-  .header { position: relative; }
-}
+.header { position: relative; z-index: 100; }
 
 .header__top {
   background: var(--dark);
@@ -1449,3 +1445,74 @@ body { font-size: 16px; }
 .service-btn { font-size: 1rem; font-weight: 700; }
 
 .adv-card__num { font-size: 3rem; }
+
+/* ===== MOBILE STICKY BAR ===== */
+.mobile-bar {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .mobile-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 200;
+    background: var(--dark);
+    border-top: 2px solid var(--yellow);
+    padding: 10px 16px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .mobile-bar__contacts {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+    flex-wrap: wrap;
+  }
+
+  .mobile-bar__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 8px 12px;
+    border-radius: 50px;
+    font-family: var(--font-main);
+    font-weight: 700;
+    font-size: 0.72rem;
+    transition: var(--transition);
+    white-space: nowrap;
+    flex: 1;
+  }
+
+  .mobile-bar__btn--call { background: var(--yellow); color: var(--dark); }
+  .mobile-bar__btn--wa   { background: #25d366; color: #fff; }
+  .mobile-bar__btn--vb   { background: #7360f2; color: #fff; }
+  .mobile-bar__btn--tg   { background: #229ed9; color: #fff; }
+
+  .mobile-bar__menu {
+    background: none;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 8px;
+    padding: 8px 10px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .mobile-bar__menu span {
+    display: block;
+    width: 20px; height: 2px;
+    background: var(--white);
+    border-radius: 2px;
+    transition: var(--transition);
+  }
+
+  /* push page content above bar */
+  body { padding-bottom: 70px; }
+}

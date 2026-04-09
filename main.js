@@ -129,11 +129,14 @@ if (track) {
 // Mobile burger menu
 const burger = document.getElementById('burger');
 const navList = document.getElementById('navList');
-if (burger && navList) {
-  burger.addEventListener('click', () => {
-    navList.classList.toggle('open');
-  });
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+
+function toggleMenu() {
+  if (navList) navList.classList.toggle('open');
 }
+
+if (burger) burger.addEventListener('click', toggleMenu);
+if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMenu);
 
 // Active nav link
 const links = document.querySelectorAll('.nav__link');

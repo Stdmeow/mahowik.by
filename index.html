@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="progress-bar" id="progressBar"></div>
+  <div class="page-transition" id="pageTransition"></div>
 
   <header class="header">
     <div class="header__top">
@@ -48,8 +50,9 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero__bg"></div>
+    <canvas id="particles-canvas"></canvas>
     <div class="container hero__content">
-      <h1 class="hero__title animate-up">Ремонт маховиков<br><span>в Беларуси</span></h1>
+      <h1 class="hero__title animate-up" id="heroTitle"></h1>
       <p class="hero__sub animate-up delay-1">Профессиональное восстановление двухмассовых и одномассовых маховиков за 6–24 часа</p>
       <div class="hero__btns animate-up delay-2">
         <a href="tel:+375293227070" class="btn btn--primary">Позвонить</a>
@@ -69,7 +72,7 @@
       </div>
       <div class="stat-card animate-fade delay-1">
         <div class="stat-card__icon">🛣️</div>
-        <div class="stat-card__value">250 000 км</div>
+        <div class="stat-card__value"><span data-count="250000">250 000</span> км</div>
         <div class="stat-card__label">пробег после ремонта</div>
       </div>
       <div class="stat-card animate-fade delay-2">
@@ -79,7 +82,7 @@
       </div>
       <div class="stat-card animate-fade delay-3">
         <div class="stat-card__icon">⏱</div>
-        <div class="stat-card__value">6–24 часа</div>
+        <div class="stat-card__value"><span data-count="6">6</span>–24 часа</div>
         <div class="stat-card__label">срок ремонта</div>
       </div>
     </div>

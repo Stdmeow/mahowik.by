@@ -1577,3 +1577,71 @@ body { font-size: 16px; }
   /* push page content above bar */
   body { padding-bottom: 70px; }
 }
+
+/* ===== PROGRESS BAR ===== */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--yellow), var(--yellow-dark));
+  z-index: 9999;
+  transition: width 0.1s linear;
+  border-radius: 0 2px 2px 0;
+}
+
+/* ===== PAGE TRANSITION ===== */
+.page-transition {
+  position: fixed;
+  inset: 0;
+  background: var(--dark);
+  z-index: 9998;
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+.page-transition.slide-in {
+  animation: pageSlideIn 0.4s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+.page-transition.slide-out {
+  animation: pageSlideOut 0.4s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+@keyframes pageSlideIn {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0%); }
+}
+
+@keyframes pageSlideOut {
+  from { transform: translateY(0%); }
+  to   { transform: translateY(-100%); }
+}
+
+/* ===== PARTICLES ===== */
+#particles-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero { overflow: hidden; }
+.hero__bg { z-index: 0; }
+.hero__content { z-index: 3; }
+.hero__scroll { z-index: 3; }
+
+/* ===== TYPING CURSOR ===== */
+.typing-cursor {
+  display: inline-block;
+  width: 3px;
+  background: var(--yellow);
+  margin-left: 4px;
+  animation: blink 0.8s step-end infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

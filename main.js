@@ -187,3 +187,174 @@ document.querySelectorAll('.nav__link').forEach(link => {
   if (link.getAttribute('href') === currentPage) link.classList.add('active');
   else link.classList.remove('active');
 });
+
+// ===== PROGRESS BAR =====
+const progressBar = document.getElementById('progressBar');
+if (progressBar) {
+  window.addEventListener('scroll', () => {
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = total > 0 ? (window.scrollY / total) * 100 : 0;
+    progressBar.style.width = pct + '%';
+  }, { passive: true });
+}
+
+// ===== PAGE TRANSITIONS =====
+const pageTransition = document.getElementById('pageTransition');
+if (pageTransition) {
+  // slide out on load
+  pageTransition.classList.add('slide-out');
+  pageTransition.addEventListener('animationend', () => {
+    pageTransition.style.display = 'none';
+  }, { once: true });
+
+  // slide in on link click
+  document.querySelectorAll('a[href]').forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('tel:') ||
+        href.startsWith('http') || href.startsWith('viber') ||
+        href.startsWith('mailto')) return;
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      pageTransition.style.display = 'block';
+      pageTransition.classList.remove('slide-out');
+      pageTransition.classList.add('slide-in');
+      pageTransition.addEventListener('animationend', () => {
+        window.location.href = href;
+      }, { once: true });
+    });
+  });
+}
+
+// ===== PARALLAX HERO =====
+const heroBg = document.querySelector('.hero__bg');
+if (heroBg) {
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    heroBg.style.transform = `translateY(${y * 0.35}px)`;
+  }, { passive: true });
+}
+
+// ===== TYPING EFFECT =====
+const heroTitle = document.getElementById('heroTitle');
+if (heroTitle) {
+  const lines = ['Ремонт маховиков', 'в Беларуси'];
+  const colors = [null, 'var(--yellow)'];
+  let html = '';
+  let charIndex = 0;
+  let lineIndex = 0;
+  const cursor = document.createElement('span');
+  cursor.className = 'typing-cursor';
+  heroTitle.appendChild(cursor);
+
+  function typeNext() {
+    if (lineIndex >= lines.length) { return; }
+    const line = lines[lineIndex];
+    if (charIndex < line.length) {
+      if (charIndex === 0) {
+        html += colors[lineIndex]
+          ? `<span style="color:${colors[lineIndex]}">`
+          : '';
+      }
+      html += line[charIndex];
+      charIndex++;
+      const closeTag = colors[lineIndex] && charIndex === line.length ? '</span>' : '';
+      heroTitle.innerHTML = html + closeTag + '<span class="typing-cursor"></span>';
+      setTimeout(typeNext, 55);
+    } else {
+      if (colors[lineIndex]) html += '</span>';
+      lineIndex++;
+      charIndex = 0;
+      if (lineIndex < lines.length) {
+        html += '<br>';
+        setTimeout(typeNext, 180);
+      }
+    }
+  }
+  setTimeout(typeNext, 600);
+}
+
+// ===== COUNTER ANIMATION =====
+function animateCounter(el, target, duration) {
+  const start = performance.now();
+  const update = (now) => {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(ease * target).toLocaleString('ru');
+    if (progress < 1) requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+}
+
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    const raw = el.dataset.count;
+    if (!raw) return;
+    animateCounter(el, parseInt(raw), 1800);
+    counterObserver.unobserve(el);
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
+
+// ===== PARTICLES =====
+const canvas = document.getElementById('particles-canvas');
+if (canvas) {
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let W, H;
+
+  function resize() {
+    const hero = canvas.parentElement;
+    W = canvas.width = hero.offsetWidth;
+    H = canvas.height = hero.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (let i = 0; i < 55; i++) {
+    particles.push({
+      x: Math.random() * 1000,
+      y: Math.random() * 600,
+      r: Math.random() * 1.8 + 0.4,
+      dx: (Math.random() - 0.5) * 0.4,
+      dy: (Math.random() - 0.5) * 0.4,
+      o: Math.random() * 0.5 + 0.15
+    });
+  }
+
+  function drawParticles() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => {
+      p.x += p.dx; p.y += p.dy;
+      if (p.x < 0) p.x = W;
+      if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H;
+      if (p.y > H) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(245,168,0,${p.o})`;
+      ctx.fill();
+    });
+    // draw connecting lines
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(245,168,0,${0.12 * (1 - dist/120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(drawParticles);
+  }
+  drawParticles();
+}

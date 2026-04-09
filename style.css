@@ -2047,3 +2047,8 @@ img[loading="lazy"].loaded {
   justify-content: center;
   flex-shrink: 0;
 }
+
+@media (max-width: 640px) {
+  .hero__scroll { display: none; }
+  .hero__content { padding-bottom: 40px; }
+}

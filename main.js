@@ -416,65 +416,36 @@ if (reviewsTrack) {
   reviewsPrev.addEventListener('click', () => goReview(rCurrent - 1));
   reviewsNext.addEventListener('click', () => goReview(rCurrent + 1));
 
-  // Используем pointer events для лучшей совместимости
-  let startX = 0;
-  let startY = 0;
-  let isPointerDown = false;
+  // Простейший подход для Safari
+  let startX = null;
 
-  reviewsTrack.addEventListener('pointerdown', (e) => {
-    startX = e.clientX;
-    startY = e.clientY;
-    isPointerDown = true;
-    reviewsTrack.style.cursor = 'grabbing';
+  reviewsTrack.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
   });
 
-  reviewsTrack.addEventListener('pointermove', (e) => {
-    if (!isPointerDown) return;
+  reviewsTrack.addEventListener('touchend', (e) => {
+    if (startX === null) return;
     
-    const currentX = e.clientX;
-    const currentY = e.clientY;
-    const diffX = Math.abs(currentX - startX);
-    const diffY = Math.abs(currentY - startY);
+    const endX = e.changedTouches[0].clientX;
+    const diff = startX - endX;
     
-    // Если горизонтальное движение больше вертикального
-    if (diffX > diffY && diffX > 10) {
-      e.preventDefault();
-    }
-  });
-
-  reviewsTrack.addEventListener('pointerup', (e) => {
-    if (!isPointerDown) return;
-    
-    const endX = e.clientX;
-    const endY = e.clientY;
-    const diffX = startX - endX;
-    const diffY = Math.abs(startY - endY);
-    
-    reviewsTrack.style.cursor = 'grab';
-    
-    // Проверяем что это горизонтальный свайп
-    if (Math.abs(diffX) > 50 && Math.abs(diffX) > diffY) {
-      if (diffX > 0) {
-        // Свайп влево - следующий
+    // Минимальное расстояние для свайпа
+    if (Math.abs(diff) > 80) {
+      if (diff > 0) {
+        // Свайп влево - следующий отзыв
         goReview(rCurrent + 1);
       } else {
-        // Свайп вправо - предыдущий
+        // Свайп вправо - предыдущий отзыв  
         goReview(rCurrent - 1);
       }
     }
     
-    // Сброс
-    startX = 0;
-    startY = 0;
-    isPointerDown = false;
+    startX = null;
   });
 
-  // Обработка отмены (когда палец уходит за пределы)
-  reviewsTrack.addEventListener('pointercancel', () => {
-    reviewsTrack.style.cursor = 'grab';
-    startX = 0;
-    startY = 0;
-    isPointerDown = false;
+  // Сброс при отмене касания
+  reviewsTrack.addEventListener('touchcancel', () => {
+    startX = null;
   });
 }
 

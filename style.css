@@ -1838,9 +1838,6 @@ img[loading="lazy"].loaded {
   width: 100%;
   user-select: none;
   -webkit-user-select: none;
-  -webkit-touch-callout: none;
-  cursor: grab;
-  touch-action: manipulation;
 }
 
 .review-card {

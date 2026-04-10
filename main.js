@@ -406,22 +406,40 @@ if (reviewsTrack) {
   });
 
   function goReview(index) {
-    rCurrent = (index + total) % total;
+    const newIndex = (index + total) % total;
     
-    // Вместо transform используем display none/block
-    cards.forEach((card, i) => {
-      if (i === rCurrent) {
-        card.style.display = 'block';
-      } else {
-        card.style.display = 'none';
-      }
-    });
+    if (newIndex === rCurrent) return;
+    
+    const currentCard = cards[rCurrent];
+    const nextCard = cards[newIndex];
+    
+    // Определяем направление
+    const isNext = newIndex > rCurrent || (rCurrent === total - 1 && newIndex === 0);
+    
+    // Анимация выхода текущей карточки
+    currentCard.style.animation = isNext ? 'slideOutLeft 0.3s ease-in-out' : 'slideOutRight 0.3s ease-in-out';
+    
+    setTimeout(() => {
+      currentCard.style.display = 'none';
+      currentCard.style.animation = '';
+      
+      // Показываем новую карточку с анимацией входа
+      nextCard.style.display = 'block';
+      nextCard.style.animation = isNext ? 'slideInRight 0.3s ease-in-out' : 'slideInLeft 0.3s ease-in-out';
+      
+      setTimeout(() => {
+        nextCard.style.animation = '';
+      }, 300);
+      
+    }, 300);
+    
+    rCurrent = newIndex;
     
     reviewsDots.querySelectorAll('.reviews__dot').forEach((d, i) => {
       d.classList.toggle('active', i === rCurrent);
     });
     
-    updateDebug(`goReview: now showing ${rCurrent}`);
+    updateDebug(`goReview: animated to ${rCurrent}`);
   }
 
   reviewsPrev.addEventListener('click', () => goReview(rCurrent - 1));

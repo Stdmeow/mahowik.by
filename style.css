@@ -1834,10 +1834,14 @@ img[loading="lazy"].loaded {
   display: flex;
   transition: transform 0.5s cubic-bezier(.4,0,.2,1);
   width: 100%;
-  touch-action: pan-x;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
+  cursor: grab;
+}
+
+.reviews__track:active {
+  cursor: grabbing;
 }
 
 .review-card {

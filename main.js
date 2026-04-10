@@ -416,48 +416,31 @@ if (reviewsTrack) {
   reviewsPrev.addEventListener('click', () => goReview(rCurrent - 1));
   reviewsNext.addEventListener('click', () => goReview(rCurrent + 1));
 
-  let rTouchStartX = 0;
-  let rTouchStartY = 0;
-  let rTouchEndX = 0;
-  let rTouchEndY = 0;
-  let rIsSwiping = false;
+  let touchStartX = 0;
+  let touchStartTime = 0;
 
-  reviewsTrack.addEventListener('touchstart', e => {
-    rTouchStartX = e.touches[0].clientX;
-    rTouchStartY = e.touches[0].clientY;
-    rTouchEndX = rTouchStartX;
-    rTouchEndY = rTouchStartY;
-    rIsSwiping = false;
-  }, { passive: true });
+  reviewsTrack.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].pageX;
+    touchStartTime = Date.now();
+  }, false);
 
-  reviewsTrack.addEventListener('touchmove', e => {
-    rTouchEndX = e.touches[0].clientX;
-    rTouchEndY = e.touches[0].clientY;
+  reviewsTrack.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].pageX;
+    const touchEndTime = Date.now();
+    const distance = touchStartX - touchEndX;
+    const duration = touchEndTime - touchStartTime;
     
-    const diffX = Math.abs(rTouchStartX - rTouchEndX);
-    const diffY = Math.abs(rTouchStartY - rTouchEndY);
-    
-    if (diffX > 10 && diffX > diffY) {
-      rIsSwiping = true;
-    }
-  }, { passive: true });
-
-  reviewsTrack.addEventListener('touchend', e => {
-    if (rIsSwiping) {
-      const diffX = rTouchStartX - rTouchEndX;
-      const diffY = Math.abs(rTouchStartY - rTouchEndY);
-      
-      if (Math.abs(diffX) > 50 && Math.abs(diffX) > diffY) {
-        goReview(rCurrent + (diffX > 0 ? 1 : -1));
+    // Свайп должен быть достаточно быстрым и длинным
+    if (duration < 500 && Math.abs(distance) > 50) {
+      if (distance > 0) {
+        // Свайп влево - следующий
+        goReview(rCurrent + 1);
+      } else {
+        // Свайп вправо - предыдущий
+        goReview(rCurrent - 1);
       }
     }
-    
-    rTouchStartX = 0;
-    rTouchStartY = 0;
-    rTouchEndX = 0;
-    rTouchEndY = 0;
-    rIsSwiping = false;
-  }, { passive: true });
+  }, false);
 }
 
 const workStatusEl = document.getElementById('workStatus');

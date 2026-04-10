@@ -417,47 +417,53 @@ if (reviewsTrack) {
   reviewsNext.addEventListener('click', () => goReview(rCurrent + 1));
 
   let touchStartX = 0;
-  let touchStartTime = 0;
-  let isProcessing = false;
+  let touchStartY = 0;
+  let touchMoveX = 0;
+  let isSwiping = false;
 
   reviewsTrack.addEventListener('touchstart', (e) => {
-    if (isProcessing) return;
-    touchStartX = e.touches[0].pageX;
-    touchStartTime = Date.now();
-  }, false);
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchMoveX = touchStartX;
+    isSwiping = false;
+  }, { passive: true });
+
+  reviewsTrack.addEventListener('touchmove', (e) => {
+    if (!isSwiping) {
+      touchMoveX = e.touches[0].clientX;
+      const diffX = Math.abs(touchMoveX - touchStartX);
+      const diffY = Math.abs(e.touches[0].clientY - touchStartY);
+      
+      // Определяем что это горизонтальный свайп
+      if (diffX > 10 && diffX > diffY) {
+        isSwiping = true;
+      }
+    } else {
+      touchMoveX = e.touches[0].clientX;
+    }
+  }, { passive: true });
 
   reviewsTrack.addEventListener('touchend', (e) => {
-    if (isProcessing) return;
-    
-    const touchEndX = e.changedTouches[0].pageX;
-    const touchEndTime = Date.now();
-    const distance = touchStartX - touchEndX;
-    const duration = touchEndTime - touchStartTime;
-    
-    // Свайп должен быть достаточно быстрым и длинным
-    if (duration < 500 && Math.abs(distance) > 50) {
-      isProcessing = true;
+    if (isSwiping) {
+      const distance = touchStartX - touchMoveX;
       
-      if (distance > 0) {
-        // Свайп влево - следующий
-        goReview(rCurrent + 1);
-      } else {
-        // Свайп вправо - предыдущий
-        goReview(rCurrent - 1);
+      if (Math.abs(distance) > 50) {
+        if (distance > 0) {
+          // Свайп влево - следующий
+          goReview(rCurrent + 1);
+        } else {
+          // Свайп вправо - предыдущий
+          goReview(rCurrent - 1);
+        }
       }
-      
-      // Разблокировка после анимации
-      setTimeout(() => {
-        isProcessing = false;
-        touchStartX = 0;
-        touchStartTime = 0;
-      }, 600);
-    } else {
-      // Сброс если свайп не прошел
-      touchStartX = 0;
-      touchStartTime = 0;
     }
-  }, false);
+    
+    // Сброс
+    touchStartX = 0;
+    touchStartY = 0;
+    touchMoveX = 0;
+    isSwiping = false;
+  }, { passive: true });
 }
 
 const workStatusEl = document.getElementById('workStatus');

@@ -1828,6 +1828,8 @@ img[loading="lazy"].loaded {
   position: relative;
   margin-top: 40px;
   width: 100%;
+  touch-action: pan-y pinch-zoom;
+  -webkit-overflow-scrolling: touch;
 }
 
 .reviews__track {
@@ -1838,6 +1840,7 @@ img[loading="lazy"].loaded {
   -webkit-user-select: none;
   -webkit-touch-callout: none;
   cursor: grab;
+  touch-action: pan-y;
 }
 
 .reviews__track:active {

@@ -416,54 +416,66 @@ if (reviewsTrack) {
   reviewsPrev.addEventListener('click', () => goReview(rCurrent - 1));
   reviewsNext.addEventListener('click', () => goReview(rCurrent + 1));
 
-  let touchStartX = 0;
-  let touchStartY = 0;
-  let touchMoveX = 0;
-  let isSwiping = false;
+  // Используем pointer events для лучшей совместимости
+  let startX = 0;
+  let startY = 0;
+  let isPointerDown = false;
 
-  reviewsTrack.addEventListener('touchstart', (e) => {
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
-    touchMoveX = touchStartX;
-    isSwiping = false;
-  }, { passive: true });
+  reviewsTrack.addEventListener('pointerdown', (e) => {
+    startX = e.clientX;
+    startY = e.clientY;
+    isPointerDown = true;
+    reviewsTrack.style.cursor = 'grabbing';
+  });
 
-  reviewsTrack.addEventListener('touchmove', (e) => {
-    if (!isSwiping) {
-      touchMoveX = e.touches[0].clientX;
-      const diffX = Math.abs(touchMoveX - touchStartX);
-      const diffY = Math.abs(e.touches[0].clientY - touchStartY);
-      
-      // Определяем что это горизонтальный свайп
-      if (diffX > 10 && diffX > diffY) {
-        isSwiping = true;
-      }
-    } else {
-      touchMoveX = e.touches[0].clientX;
+  reviewsTrack.addEventListener('pointermove', (e) => {
+    if (!isPointerDown) return;
+    
+    const currentX = e.clientX;
+    const currentY = e.clientY;
+    const diffX = Math.abs(currentX - startX);
+    const diffY = Math.abs(currentY - startY);
+    
+    // Если горизонтальное движение больше вертикального
+    if (diffX > diffY && diffX > 10) {
+      e.preventDefault();
     }
-  }, { passive: true });
+  });
 
-  reviewsTrack.addEventListener('touchend', (e) => {
-    if (isSwiping) {
-      const distance = touchStartX - touchMoveX;
-      
-      if (Math.abs(distance) > 50) {
-        if (distance > 0) {
-          // Свайп влево - следующий
-          goReview(rCurrent + 1);
-        } else {
-          // Свайп вправо - предыдущий
-          goReview(rCurrent - 1);
-        }
+  reviewsTrack.addEventListener('pointerup', (e) => {
+    if (!isPointerDown) return;
+    
+    const endX = e.clientX;
+    const endY = e.clientY;
+    const diffX = startX - endX;
+    const diffY = Math.abs(startY - endY);
+    
+    reviewsTrack.style.cursor = 'grab';
+    
+    // Проверяем что это горизонтальный свайп
+    if (Math.abs(diffX) > 50 && Math.abs(diffX) > diffY) {
+      if (diffX > 0) {
+        // Свайп влево - следующий
+        goReview(rCurrent + 1);
+      } else {
+        // Свайп вправо - предыдущий
+        goReview(rCurrent - 1);
       }
     }
     
     // Сброс
-    touchStartX = 0;
-    touchStartY = 0;
-    touchMoveX = 0;
-    isSwiping = false;
-  }, { passive: true });
+    startX = 0;
+    startY = 0;
+    isPointerDown = false;
+  });
+
+  // Обработка отмены (когда палец уходит за пределы)
+  reviewsTrack.addEventListener('pointercancel', () => {
+    reviewsTrack.style.cursor = 'grab';
+    startX = 0;
+    startY = 0;
+    isPointerDown = false;
+  });
 }
 
 const workStatusEl = document.getElementById('workStatus');

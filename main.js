@@ -419,6 +419,7 @@ if (reviewsTrack) {
   // Визуальный дебаг прямо на странице
   let startX = null;
   let debugCount = 0;
+  let isProcessing = false;
   
   // Создаем элемент для отображения дебага
   const debugDiv = document.createElement('div');
@@ -442,12 +443,22 @@ if (reviewsTrack) {
     updateDebug('Found reviews wrap');
     
     reviewsWrap.addEventListener('touchstart', (e) => {
+      if (isProcessing) {
+        updateDebug('BLOCKED: processing');
+        return;
+      }
+      
       startX = e.touches[0].clientX;
       debugCount++;
       updateDebug(`Start #${debugCount}: ${startX} (cur: ${rCurrent})`);
     });
 
     reviewsWrap.addEventListener('touchend', (e) => {
+      if (isProcessing) {
+        updateDebug('BLOCKED: processing end');
+        return;
+      }
+      
       updateDebug(`End event: startX=${startX}, cur=${rCurrent}`);
       
       if (startX === null) {
@@ -461,6 +472,9 @@ if (reviewsTrack) {
       updateDebug(`End: ${endX}, diff: ${diff}`);
       
       if (Math.abs(diff) > 50) {
+        isProcessing = true;
+        updateDebug('PROCESSING: true');
+        
         if (diff > 0) {
           updateDebug(`→ Next (${rCurrent} → ${rCurrent + 1})`);
           goReview(rCurrent + 1);
@@ -468,6 +482,12 @@ if (reviewsTrack) {
           updateDebug(`← Prev (${rCurrent} → ${rCurrent - 1})`);
           goReview(rCurrent - 1);
         }
+        
+        // Разблокировка через 1 секунду
+        setTimeout(() => {
+          isProcessing = false;
+          updateDebug('PROCESSING: false');
+        }, 1000);
       } else {
         updateDebug('Too short');
       }
@@ -479,6 +499,7 @@ if (reviewsTrack) {
     reviewsWrap.addEventListener('touchcancel', () => {
       updateDebug('Cancelled');
       startX = null;
+      isProcessing = false;
     });
   } else {
     updateDebug('Reviews wrap NOT found!');

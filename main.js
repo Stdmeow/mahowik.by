@@ -416,48 +416,59 @@ if (reviewsTrack) {
   reviewsPrev.addEventListener('click', () => goReview(rCurrent - 1));
   reviewsNext.addEventListener('click', () => goReview(rCurrent + 1));
 
-  // Дебаг версия для понимания проблемы
+  // Визуальный дебаг прямо на странице
   let startX = null;
   let debugCount = 0;
+  
+  // Создаем элемент для отображения дебага
+  const debugDiv = document.createElement('div');
+  debugDiv.style.cssText = 'position:fixed;top:10px;left:10px;background:red;color:white;padding:10px;z-index:9999;font-size:12px;max-width:300px;';
+  debugDiv.innerHTML = 'Debug: waiting...';
+  document.body.appendChild(debugDiv);
+
+  function updateDebug(message) {
+    debugDiv.innerHTML += '<br>' + message;
+    // Оставляем только последние 5 сообщений
+    const lines = debugDiv.innerHTML.split('<br>');
+    if (lines.length > 6) {
+      debugDiv.innerHTML = lines.slice(-5).join('<br>');
+    }
+  }
 
   reviewsTrack.addEventListener('touchstart', (e) => {
     startX = e.touches[0].clientX;
     debugCount++;
-    console.log(`Touch start #${debugCount}: startX = ${startX}`);
+    updateDebug(`Start #${debugCount}: ${startX}`);
   });
 
   reviewsTrack.addEventListener('touchend', (e) => {
-    console.log(`Touch end #${debugCount}: startX = ${startX}`);
-    
     if (startX === null) {
-      console.log('startX is null, returning');
+      updateDebug('End: startX null');
       return;
     }
     
     const endX = e.changedTouches[0].clientX;
     const diff = startX - endX;
     
-    console.log(`endX = ${endX}, diff = ${diff}, current = ${rCurrent}`);
+    updateDebug(`End: ${endX}, diff: ${diff}`);
     
-    // Минимальное расстояние для свайпа
     if (Math.abs(diff) > 50) {
       if (diff > 0) {
-        console.log('Swiping to next');
+        updateDebug('→ Next');
         goReview(rCurrent + 1);
       } else {
-        console.log('Swiping to prev');
+        updateDebug('← Prev');
         goReview(rCurrent - 1);
       }
     } else {
-      console.log('Swipe too short');
+      updateDebug('Too short');
     }
     
     startX = null;
-    console.log('Reset startX to null');
   });
 
   reviewsTrack.addEventListener('touchcancel', () => {
-    console.log('Touch cancelled');
+    updateDebug('Cancelled');
     startX = null;
   });
 }

@@ -418,13 +418,17 @@ if (reviewsTrack) {
 
   let touchStartX = 0;
   let touchStartTime = 0;
+  let isProcessing = false;
 
   reviewsTrack.addEventListener('touchstart', (e) => {
+    if (isProcessing) return;
     touchStartX = e.touches[0].pageX;
     touchStartTime = Date.now();
   }, false);
 
   reviewsTrack.addEventListener('touchend', (e) => {
+    if (isProcessing) return;
+    
     const touchEndX = e.changedTouches[0].pageX;
     const touchEndTime = Date.now();
     const distance = touchStartX - touchEndX;
@@ -432,6 +436,8 @@ if (reviewsTrack) {
     
     // Свайп должен быть достаточно быстрым и длинным
     if (duration < 500 && Math.abs(distance) > 50) {
+      isProcessing = true;
+      
       if (distance > 0) {
         // Свайп влево - следующий
         goReview(rCurrent + 1);
@@ -439,6 +445,17 @@ if (reviewsTrack) {
         // Свайп вправо - предыдущий
         goReview(rCurrent - 1);
       }
+      
+      // Разблокировка после анимации
+      setTimeout(() => {
+        isProcessing = false;
+        touchStartX = 0;
+        touchStartTime = 0;
+      }, 600);
+    } else {
+      // Сброс если свайп не прошел
+      touchStartX = 0;
+      touchStartTime = 0;
     }
   }, false);
 }

@@ -416,35 +416,48 @@ if (reviewsTrack) {
   reviewsPrev.addEventListener('click', () => goReview(rCurrent - 1));
   reviewsNext.addEventListener('click', () => goReview(rCurrent + 1));
 
-  // Простейший подход для Safari
+  // Дебаг версия для понимания проблемы
   let startX = null;
+  let debugCount = 0;
 
   reviewsTrack.addEventListener('touchstart', (e) => {
     startX = e.touches[0].clientX;
+    debugCount++;
+    console.log(`Touch start #${debugCount}: startX = ${startX}`);
   });
 
   reviewsTrack.addEventListener('touchend', (e) => {
-    if (startX === null) return;
+    console.log(`Touch end #${debugCount}: startX = ${startX}`);
+    
+    if (startX === null) {
+      console.log('startX is null, returning');
+      return;
+    }
     
     const endX = e.changedTouches[0].clientX;
     const diff = startX - endX;
     
+    console.log(`endX = ${endX}, diff = ${diff}, current = ${rCurrent}`);
+    
     // Минимальное расстояние для свайпа
-    if (Math.abs(diff) > 80) {
+    if (Math.abs(diff) > 50) {
       if (diff > 0) {
-        // Свайп влево - следующий отзыв
+        console.log('Swiping to next');
         goReview(rCurrent + 1);
       } else {
-        // Свайп вправо - предыдущий отзыв  
+        console.log('Swiping to prev');
         goReview(rCurrent - 1);
       }
+    } else {
+      console.log('Swipe too short');
     }
     
     startX = null;
+    console.log('Reset startX to null');
   });
 
-  // Сброс при отмене касания
   reviewsTrack.addEventListener('touchcancel', () => {
+    console.log('Touch cancelled');
     startX = null;
   });
 }

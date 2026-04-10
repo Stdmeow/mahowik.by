@@ -438,100 +438,40 @@ if (reviewsTrack) {
     reviewsDots.querySelectorAll('.reviews__dot').forEach((d, i) => {
       d.classList.toggle('active', i === rCurrent);
     });
-    
-    updateDebug(`goReview: animated to ${rCurrent}`);
   }
 
   reviewsPrev.addEventListener('click', () => goReview(rCurrent - 1));
   reviewsNext.addEventListener('click', () => goReview(rCurrent + 1));
 
-  // Визуальный дебаг прямо на странице
   let startX = null;
-  let debugCount = 0;
-  let isProcessing = false;
-  
-  // Создаем элемент для отображения дебага
-  const debugDiv = document.createElement('div');
-  debugDiv.style.cssText = 'position:fixed;top:10px;left:10px;background:red;color:white;padding:10px;z-index:9999;font-size:12px;max-width:300px;';
-  debugDiv.innerHTML = 'Debug: waiting...';
-  document.body.appendChild(debugDiv);
 
-  function updateDebug(message) {
-    debugDiv.innerHTML += '<br>' + message;
-    // Оставляем только последние 8 сообщений
-    const lines = debugDiv.innerHTML.split('<br>');
-    if (lines.length > 9) {
-      debugDiv.innerHTML = lines.slice(-8).join('<br>');
-    }
-  }
-
-  // Попробуем повесить события на обертку вместо самого трека
   const reviewsWrap = document.querySelector('.reviews__track-wrap');
   
   if (reviewsWrap) {
-    updateDebug('Found reviews wrap');
-    
     reviewsWrap.addEventListener('touchstart', (e) => {
-      if (isProcessing) {
-        updateDebug('BLOCKED: processing');
-        return;
-      }
-      
       startX = e.touches[0].clientX;
-      debugCount++;
-      updateDebug(`Start #${debugCount}: ${startX} (cur: ${rCurrent})`);
     });
 
     reviewsWrap.addEventListener('touchend', (e) => {
-      if (isProcessing) {
-        updateDebug('BLOCKED: processing end');
-        return;
-      }
-      
-      updateDebug(`End event: startX=${startX}, cur=${rCurrent}`);
-      
-      if (startX === null) {
-        updateDebug('End: startX null - SKIP');
-        return;
-      }
+      if (startX === null) return;
       
       const endX = e.changedTouches[0].clientX;
       const diff = startX - endX;
       
-      updateDebug(`End: ${endX}, diff: ${diff}`);
-      
       if (Math.abs(diff) > 50) {
-        isProcessing = true;
-        updateDebug('PROCESSING: true');
-        
         if (diff > 0) {
-          updateDebug(`→ Next (${rCurrent} → ${rCurrent + 1})`);
           goReview(rCurrent + 1);
         } else {
-          updateDebug(`← Prev (${rCurrent} → ${rCurrent - 1})`);
           goReview(rCurrent - 1);
         }
-        
-        // Разблокировка через 1 секунду
-        setTimeout(() => {
-          isProcessing = false;
-          updateDebug('PROCESSING: false');
-        }, 1000);
-      } else {
-        updateDebug('Too short');
       }
       
       startX = null;
-      updateDebug('Reset startX');
     });
 
     reviewsWrap.addEventListener('touchcancel', () => {
-      updateDebug('Cancelled');
       startX = null;
-      isProcessing = false;
     });
-  } else {
-    updateDebug('Reviews wrap NOT found!');
   }
 }
 

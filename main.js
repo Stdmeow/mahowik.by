@@ -417,14 +417,33 @@ if (reviewsTrack) {
   reviewsNext.addEventListener('click', () => goReview(rCurrent + 1));
 
   let rTouchX = 0;
+  let rTouchY = 0;
+  let isSwiping = false;
 
   reviewsTrack.addEventListener('touchstart', e => {
     rTouchX = e.touches[0].clientX;
+    rTouchY = e.touches[0].clientY;
+    isSwiping = false;
+  }, { passive: true });
+
+  reviewsTrack.addEventListener('touchmove', e => {
+    if (!isSwiping) {
+      const diffX = Math.abs(e.touches[0].clientX - rTouchX);
+      const diffY = Math.abs(e.touches[0].clientY - rTouchY);
+      if (diffX > diffY && diffX > 10) {
+        isSwiping = true;
+      }
+    }
   }, { passive: true });
 
   reviewsTrack.addEventListener('touchend', e => {
-    const diff = rTouchX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 40) goReview(rCurrent + (diff > 0 ? 1 : -1));
+    if (isSwiping) {
+      const diff = rTouchX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) {
+        goReview(rCurrent + (diff > 0 ? 1 : -1));
+      }
+    }
+    isSwiping = false;
   }, { passive: true });
 }
 

@@ -428,10 +428,10 @@ if (reviewsTrack) {
 
   function updateDebug(message) {
     debugDiv.innerHTML += '<br>' + message;
-    // Оставляем только последние 5 сообщений
+    // Оставляем только последние 8 сообщений
     const lines = debugDiv.innerHTML.split('<br>');
-    if (lines.length > 6) {
-      debugDiv.innerHTML = lines.slice(-5).join('<br>');
+    if (lines.length > 9) {
+      debugDiv.innerHTML = lines.slice(-8).join('<br>');
     }
   }
 
@@ -444,12 +444,14 @@ if (reviewsTrack) {
     reviewsWrap.addEventListener('touchstart', (e) => {
       startX = e.touches[0].clientX;
       debugCount++;
-      updateDebug(`Start #${debugCount}: ${startX}`);
+      updateDebug(`Start #${debugCount}: ${startX} (cur: ${rCurrent})`);
     });
 
     reviewsWrap.addEventListener('touchend', (e) => {
+      updateDebug(`End event: startX=${startX}, cur=${rCurrent}`);
+      
       if (startX === null) {
-        updateDebug('End: startX null');
+        updateDebug('End: startX null - SKIP');
         return;
       }
       
@@ -460,10 +462,10 @@ if (reviewsTrack) {
       
       if (Math.abs(diff) > 50) {
         if (diff > 0) {
-          updateDebug('→ Next');
+          updateDebug(`→ Next (${rCurrent} → ${rCurrent + 1})`);
           goReview(rCurrent + 1);
         } else {
-          updateDebug('← Prev');
+          updateDebug(`← Prev (${rCurrent} → ${rCurrent - 1})`);
           goReview(rCurrent - 1);
         }
       } else {
@@ -471,6 +473,7 @@ if (reviewsTrack) {
       }
       
       startX = null;
+      updateDebug('Reset startX');
     });
 
     reviewsWrap.addEventListener('touchcancel', () => {

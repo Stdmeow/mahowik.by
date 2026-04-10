@@ -420,31 +420,44 @@ if (reviewsTrack) {
   let rTouchStartY = 0;
   let rTouchEndX = 0;
   let rTouchEndY = 0;
+  let rIsSwiping = false;
 
   reviewsTrack.addEventListener('touchstart', e => {
     rTouchStartX = e.touches[0].clientX;
     rTouchStartY = e.touches[0].clientY;
-  });
+    rTouchEndX = rTouchStartX;
+    rTouchEndY = rTouchStartY;
+    rIsSwiping = false;
+  }, { passive: true });
 
   reviewsTrack.addEventListener('touchmove', e => {
     rTouchEndX = e.touches[0].clientX;
     rTouchEndY = e.touches[0].clientY;
-  });
-
-  reviewsTrack.addEventListener('touchend', e => {
-    const diffX = rTouchStartX - rTouchEndX;
+    
+    const diffX = Math.abs(rTouchStartX - rTouchEndX);
     const diffY = Math.abs(rTouchStartY - rTouchEndY);
     
-    if (Math.abs(diffX) > 50 && Math.abs(diffX) > diffY) {
-      e.preventDefault();
-      goReview(rCurrent + (diffX > 0 ? 1 : -1));
+    if (diffX > 10 && diffX > diffY) {
+      rIsSwiping = true;
+    }
+  }, { passive: true });
+
+  reviewsTrack.addEventListener('touchend', e => {
+    if (rIsSwiping) {
+      const diffX = rTouchStartX - rTouchEndX;
+      const diffY = Math.abs(rTouchStartY - rTouchEndY);
+      
+      if (Math.abs(diffX) > 50 && Math.abs(diffX) > diffY) {
+        goReview(rCurrent + (diffX > 0 ? 1 : -1));
+      }
     }
     
     rTouchStartX = 0;
     rTouchStartY = 0;
     rTouchEndX = 0;
     rTouchEndY = 0;
-  });
+    rIsSwiping = false;
+  }, { passive: true });
 }
 
 const workStatusEl = document.getElementById('workStatus');

@@ -416,35 +416,35 @@ if (reviewsTrack) {
   reviewsPrev.addEventListener('click', () => goReview(rCurrent - 1));
   reviewsNext.addEventListener('click', () => goReview(rCurrent + 1));
 
-  let rTouchX = 0;
-  let rTouchY = 0;
-  let isSwiping = false;
+  let rTouchStartX = 0;
+  let rTouchStartY = 0;
+  let rTouchEndX = 0;
+  let rTouchEndY = 0;
 
   reviewsTrack.addEventListener('touchstart', e => {
-    rTouchX = e.touches[0].clientX;
-    rTouchY = e.touches[0].clientY;
-    isSwiping = false;
-  }, { passive: true });
+    rTouchStartX = e.touches[0].clientX;
+    rTouchStartY = e.touches[0].clientY;
+  });
 
   reviewsTrack.addEventListener('touchmove', e => {
-    if (!isSwiping) {
-      const diffX = Math.abs(e.touches[0].clientX - rTouchX);
-      const diffY = Math.abs(e.touches[0].clientY - rTouchY);
-      if (diffX > diffY && diffX > 10) {
-        isSwiping = true;
-      }
-    }
-  }, { passive: true });
+    rTouchEndX = e.touches[0].clientX;
+    rTouchEndY = e.touches[0].clientY;
+  });
 
   reviewsTrack.addEventListener('touchend', e => {
-    if (isSwiping) {
-      const diff = rTouchX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 40) {
-        goReview(rCurrent + (diff > 0 ? 1 : -1));
-      }
+    const diffX = rTouchStartX - rTouchEndX;
+    const diffY = Math.abs(rTouchStartY - rTouchEndY);
+    
+    if (Math.abs(diffX) > 50 && Math.abs(diffX) > diffY) {
+      e.preventDefault();
+      goReview(rCurrent + (diffX > 0 ? 1 : -1));
     }
-    isSwiping = false;
-  }, { passive: true });
+    
+    rTouchStartX = 0;
+    rTouchStartY = 0;
+    rTouchEndX = 0;
+    rTouchEndY = 0;
+  });
 }
 
 const workStatusEl = document.getElementById('workStatus');

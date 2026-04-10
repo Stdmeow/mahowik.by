@@ -435,42 +435,51 @@ if (reviewsTrack) {
     }
   }
 
-  reviewsTrack.addEventListener('touchstart', (e) => {
-    startX = e.touches[0].clientX;
-    debugCount++;
-    updateDebug(`Start #${debugCount}: ${startX}`);
-  });
+  // Попробуем повесить события на обертку вместо самого трека
+  const reviewsWrap = document.querySelector('.reviews__track-wrap');
+  
+  if (reviewsWrap) {
+    updateDebug('Found reviews wrap');
+    
+    reviewsWrap.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      debugCount++;
+      updateDebug(`Start #${debugCount}: ${startX}`);
+    });
 
-  reviewsTrack.addEventListener('touchend', (e) => {
-    if (startX === null) {
-      updateDebug('End: startX null');
-      return;
-    }
-    
-    const endX = e.changedTouches[0].clientX;
-    const diff = startX - endX;
-    
-    updateDebug(`End: ${endX}, diff: ${diff}`);
-    
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) {
-        updateDebug('→ Next');
-        goReview(rCurrent + 1);
-      } else {
-        updateDebug('← Prev');
-        goReview(rCurrent - 1);
+    reviewsWrap.addEventListener('touchend', (e) => {
+      if (startX === null) {
+        updateDebug('End: startX null');
+        return;
       }
-    } else {
-      updateDebug('Too short');
-    }
-    
-    startX = null;
-  });
+      
+      const endX = e.changedTouches[0].clientX;
+      const diff = startX - endX;
+      
+      updateDebug(`End: ${endX}, diff: ${diff}`);
+      
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          updateDebug('→ Next');
+          goReview(rCurrent + 1);
+        } else {
+          updateDebug('← Prev');
+          goReview(rCurrent - 1);
+        }
+      } else {
+        updateDebug('Too short');
+      }
+      
+      startX = null;
+    });
 
-  reviewsTrack.addEventListener('touchcancel', () => {
-    updateDebug('Cancelled');
-    startX = null;
-  });
+    reviewsWrap.addEventListener('touchcancel', () => {
+      updateDebug('Cancelled');
+      startX = null;
+    });
+  } else {
+    updateDebug('Reviews wrap NOT found!');
+  }
 }
 
 const workStatusEl = document.getElementById('workStatus');

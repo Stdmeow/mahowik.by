@@ -1833,8 +1833,7 @@ img[loading="lazy"].loaded {
 }
 
 .reviews__track {
-  display: flex;
-  transition: transform 0.5s cubic-bezier(.4,0,.2,1);
+  display: block;
   width: 100%;
   user-select: none;
   -webkit-user-select: none;
@@ -1842,14 +1841,17 @@ img[loading="lazy"].loaded {
 
 .review-card {
   width: 100%;
-  min-width: 100%;
-  flex: 0 0 100%;
   background: var(--white);
   border-radius: var(--radius);
   padding: 32px;
   box-shadow: var(--shadow);
   border-top: 3px solid var(--yellow);
   box-sizing: border-box;
+  display: none;
+}
+
+.review-card:first-child {
+  display: block;
 }
 
 .review-card__stars {

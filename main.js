@@ -407,10 +407,21 @@ if (reviewsTrack) {
 
   function goReview(index) {
     rCurrent = (index + total) % total;
-    reviewsTrack.style.transform = `translateX(-${rCurrent * 100}%)`;
+    
+    // Вместо transform используем display none/block
+    cards.forEach((card, i) => {
+      if (i === rCurrent) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    
     reviewsDots.querySelectorAll('.reviews__dot').forEach((d, i) => {
       d.classList.toggle('active', i === rCurrent);
     });
+    
+    updateDebug(`goReview: now showing ${rCurrent}`);
   }
 
   reviewsPrev.addEventListener('click', () => goReview(rCurrent - 1));

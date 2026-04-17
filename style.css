@@ -1923,6 +1923,13 @@ img[loading="lazy"].loaded {
   margin-top: 3px;
 }
 
+.review-card__date {
+  font-size: 0.75rem;
+  color: #999;
+  margin-top: 4px;
+  opacity: 0.9;
+}
+
 .reviews__nav {
   display: flex;
   justify-content: center;

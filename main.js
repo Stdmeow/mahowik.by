@@ -388,15 +388,103 @@ document.querySelectorAll('img[loading="lazy"]').forEach(img => {
   }
 });
 
+// Загрузка отзывов с API сервера
+const API_URL = 'http://localhost:3000/api/reviews';
+
+// Резервные отзывы (если API недоступен)
+const fallbackReviews = [
+  {
+    name: "Валера",
+    date: "28 февраля 2026",
+    stars: 5,
+    text: "Шикарно сделали! Работает как новый! И даже лучше. Проехал уже 157 тыс. км. Гарантию дали всего 2 месяца, я езжу уже 2,5 года. Вопросов не возникло. Нормальный сервис.",
+    car: "Двухмассовый маховик"
+  },
+  {
+    name: "Виталий",
+    date: "29 октября 2022",
+    stars: 5,
+    text: "Рестоврировали маховик BMW E39 M51. Сделали безупречно! На любых режимах маховик работает идеально. Что по доставке, и что по доставке обратно всё супер! Были вопросы у меня, ответили без проблем, и ещё совет дали! Очень рекомендую!",
+    car: "BMW E39 M51"
+  },
+  {
+    name: "Владимир",
+    date: "31 июля 2021",
+    stars: 5,
+    text: "Долго думал восстанавливать или покупать новый. Решил восстанавливать. Скажу что восстановленный маховик по внешнему виду не отличить от нового. Все аккуратно. Механику качество понравилось. Я из Бреста. С доставкой также не возникло проблем. Рекомендую.",
+    car: "Оригинальный маховик"
+  }
+];
+
+async function loadReviews() {
+  try {
+    const response = await fetch(API_URL);
+    const data = await response.json();
+    
+    if (data.success && data.reviews && data.reviews.length > 0) {
+      console.log('✅ Отзывы загружены с сервера:', data.reviews.length);
+      return data.reviews;
+    }
+    
+    console.warn('⚠️ Используются резервные отзывы');
+    return fallbackReviews;
+  } catch (error) {
+    console.error('❌ Ошибка загрузки отзывов:', error);
+    console.warn('⚠️ Используются резервные отзывы');
+    return fallbackReviews;
+  }
+}
+
 const reviewsTrack = document.getElementById('reviewsTrack');
 const reviewsDots = document.getElementById('reviewsDots');
 const reviewsPrev = document.getElementById('reviewsPrev');
 const reviewsNext = document.getElementById('reviewsNext');
 
 if (reviewsTrack) {
-  const cards = reviewsTrack.querySelectorAll('.review-card');
-  let rCurrent = 0;
-  const total = cards.length;
+  // Инициализация отзывов
+  (async function initReviews() {
+    const realReviews = await loadReviews();
+    
+    // Очищаем существующие отзывы и создаем новые из реальных данных
+    reviewsTrack.innerHTML = '';
+    
+    if (realReviews.length === 0) {
+      reviewsTrack.innerHTML = '<p style="color: #888; text-align: center; padding: 40px;">Отзывы временно недоступны</p>';
+      return;
+    }
+    
+    realReviews.forEach((review, index) => {
+      const card = document.createElement('div');
+      card.className = 'review-card';
+      if (index === 0) {
+        card.style.display = 'block';
+        card.style.opacity = '1';
+      } else {
+        card.style.display = 'none';
+        card.style.opacity = '0';
+      }
+      
+      const starsHTML = '★'.repeat(review.stars) + '☆'.repeat(5 - review.stars);
+      
+      card.innerHTML = `
+        <div class="review-card__stars">${starsHTML}</div>
+        <p class="review-card__text">${review.text}</p>
+        <div class="review-card__author">
+          <div class="review-card__avatar">${review.name.substring(0, 2).toUpperCase()}</div>
+          <div>
+            <div class="review-card__name">${review.name}</div>
+            <div class="review-card__car">${review.car}</div>
+            <div class="review-card__date">${review.date}</div>
+          </div>
+        </div>
+      `;
+      
+      reviewsTrack.appendChild(card);
+    });
+    
+    const cards = reviewsTrack.querySelectorAll('.review-card');
+    let rCurrent = 0;
+    const total = cards.length;
 
   cards.forEach((_, i) => {
     const d = document.createElement('button');
@@ -413,23 +501,22 @@ if (reviewsTrack) {
     const currentCard = cards[rCurrent];
     const nextCard = cards[newIndex];
     
-    // Определяем направление
-    const isNext = newIndex > rCurrent || (rCurrent === total - 1 && newIndex === 0);
-    
-    // Анимация выхода текущей карточки
-    currentCard.style.animation = isNext ? 'slideOutLeft 0.3s ease-in-out' : 'slideOutRight 0.3s ease-in-out';
+    // Скрываем текущую карточку
+    currentCard.style.opacity = '0';
+    currentCard.style.transition = 'opacity 0.3s ease-in-out';
     
     setTimeout(() => {
       currentCard.style.display = 'none';
-      currentCard.style.animation = '';
       
-      // Показываем новую карточку с анимацией входа
+      // Показываем новую карточку
       nextCard.style.display = 'block';
-      nextCard.style.animation = isNext ? 'slideInRight 0.3s ease-in-out' : 'slideInLeft 0.3s ease-in-out';
+      nextCard.style.opacity = '0';
       
+      // Плавное появление
       setTimeout(() => {
-        nextCard.style.animation = '';
-      }, 300);
+        nextCard.style.transition = 'opacity 0.3s ease-in-out';
+        nextCard.style.opacity = '1';
+      }, 50);
       
     }, 300);
     
@@ -473,6 +560,7 @@ if (reviewsTrack) {
       startX = null;
     });
   }
+  })(); // Конец async IIFE
 }
 
 const workStatusEl = document.getElementById('workStatus');

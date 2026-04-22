@@ -640,8 +640,6 @@ if (reviewsTrack) {
   reviewsPrev.addEventListener('click', () => goReview(rCurrent - 1));
   reviewsNext.addEventListener('click', () => goReview(rCurrent + 1));
 
-  let startX = null;
-
   const reviewsWrap = document.querySelector('.reviews__track-wrap');
   
   if (reviewsWrap) {
@@ -664,10 +662,8 @@ if (reviewsTrack) {
     }, { passive: false });
 
     reviewsWrap.addEventListener('touchend', (e) => {
-      if (startX === null) return;
-      
       const endX = e.changedTouches[0].clientX;
-      const diff = startX - endX;
+      const diff = reviewTouchStartX - endX;
       
       if (Math.abs(diff) > 50) {
         if (diff > 0) {
@@ -676,12 +672,6 @@ if (reviewsTrack) {
           goReview(rCurrent - 1);
         }
       }
-      
-      startX = null;
-    });
-
-    reviewsWrap.addEventListener('touchcancel', () => {
-      startX = null;
     });
   }
   })();

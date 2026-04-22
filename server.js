@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
-const cheerio = require('cheerio');
 
 const app = express();
 const PORT = 3000;
@@ -9,15 +8,13 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
-// Кэш для отзывов (обновляется каждые 30 минут)
 let reviewsCache = {
   data: [],
   lastUpdate: null
 };
 
-const CACHE_DURATION = 30 * 60 * 1000; // 30 минут
+const CACHE_DURATION = 30 * 60 * 1000;
 
-// Функция парсинга отзывов с firmi.by
 async function parseReviews() {
   try {
     const url = 'https://firmi.by/minsk/remont-restavraciya-vosstanovlenie-dvuhmassovogo-mahovika-52249';
@@ -33,7 +30,6 @@ async function parseReviews() {
     const html = response.data;
     const reviews = [];
     
-    // Парсим отзывы из текста (они в простом формате)
     const reviewPattern = /([А-Яа-яA-Za-z\s]+)\s+(\d{1,2}\s+[а-я]+\s+\d{4})\s+в\s+\d{1,2}:\d{2}\s+(.*?)(?=\n\s*\n|\n\s*[А-Я]|$)/gs;
     const matches = [...html.matchAll(reviewPattern)];
     
@@ -44,14 +40,12 @@ async function parseReviews() {
       const date = match[2].trim();
       const text = match[3].trim();
       
-      // Фильтруем негативные отзывы
       const isNegative = 
         text.includes('не рекомендую') || 
         text.includes('был послан') ||
         text.includes('гарантия прошла') ||
         text.includes('вибрации при запуске');
       
-      // Определяем рейтинг по тексту
       let stars = 5;
       if (text.includes('нормально') || text.includes('неплохо')) {
         stars = 4;
@@ -70,13 +64,11 @@ async function parseReviews() {
 
     console.log(`Отфильтровано отзывов: ${reviews.length}`);
 
-    // Если парсинг не сработал, используем резервные данные
     if (reviews.length === 0) {
       console.warn('Парсинг не дал результатов, используем резервные данные');
       return getFallbackReviews();
     }
 
-    // Фильтруем только положительные (4-5 звезд) и сортируем по дате
     return reviews
       .filter(r => r.stars >= 4)
       .sort((a, b) => parseDate(b.date) - parseDate(a.date));
@@ -87,7 +79,6 @@ async function parseReviews() {
   }
 }
 
-// Извлечение модели автомобиля из текста
 function extractCarModel(text) {
   const carPatterns = [
     /BMW\s+[A-Z0-9\s]+/i,
@@ -113,7 +104,6 @@ function extractCarModel(text) {
   return 'Двухмассовый маховик';
 }
 
-// Парсинг даты для сортировки
 function parseDate(dateStr) {
   const months = {
     'января': 0, 'февраля': 1, 'марта': 2, 'апреля': 3,
@@ -132,7 +122,6 @@ function parseDate(dateStr) {
   return new Date();
 }
 
-// Резервные отзывы (если парсинг не работает)
 function getFallbackReviews() {
   return [
     {
@@ -257,12 +246,10 @@ function getFallbackReviews() {
   ];
 }
 
-// API endpoint для получения отзывов
 app.get('/api/reviews', async (req, res) => {
   try {
     const now = Date.now();
     
-    // Проверяем кэш
     if (reviewsCache.data.length > 0 && 
         reviewsCache.lastUpdate && 
         (now - reviewsCache.lastUpdate) < CACHE_DURATION) {
@@ -274,10 +261,8 @@ app.get('/api/reviews', async (req, res) => {
       });
     }
 
-    // Парсим новые отзывы
     const reviews = await parseReviews();
     
-    // Обновляем кэш
     reviewsCache = {
       data: reviews,
       lastUpdate: now
@@ -300,7 +285,6 @@ app.get('/api/reviews', async (req, res) => {
   }
 });
 
-// Endpoint для принудительного обновления
 app.post('/api/reviews/refresh', async (req, res) => {
   try {
     const reviews = await parseReviews();
@@ -322,7 +306,6 @@ app.post('/api/reviews/refresh', async (req, res) => {
   }
 });
 
-// Тестовый endpoint для проверки статуса
 app.get('/api/status', (req, res) => {
   res.json({
     status: 'online',

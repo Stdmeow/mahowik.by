@@ -27,14 +27,12 @@ if (track) {
   let current = 0;
   let autoTimer;
 
-  
   const slideData = Array.from(slides).map(s => ({
     src: s.querySelector('img').src,
     alt: s.querySelector('img').alt,
     caption: s.querySelector('.slider__caption') ? s.querySelector('.slider__caption').textContent : ''
   }));
 
-  
   slides.forEach((_, i) => {
     const dot = document.createElement('button');
     dot.className = 'slider__dot' + (i === 0 ? ' active' : '');
@@ -57,7 +55,6 @@ if (track) {
   prevBtn.addEventListener('click', () => { goTo(current - 1); resetAuto(); });
   nextBtn.addEventListener('click', () => { goTo(current + 1); resetAuto(); });
 
-  
   let touchStartX = 0;
   track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
   track.addEventListener('touchend', e => {
@@ -65,14 +62,12 @@ if (track) {
     if (Math.abs(diff) > 40) { goTo(current + (diff > 0 ? 1 : -1)); resetAuto(); }
   });
 
-  
   slides.forEach((slide, i) => {
     slide.addEventListener('click', () => openLightbox(i));
   });
 
   startAuto();
 
-  
   let lbCurrent = 0;
 
   function openLightbox(index) {
@@ -106,7 +101,6 @@ if (track) {
     updateLightbox();
   });
 
-  
   document.addEventListener('keydown', e => {
     if (!lightbox.classList.contains('open')) return;
     if (e.key === 'Escape') closeLightbox();
@@ -114,7 +108,6 @@ if (track) {
     if (e.key === 'ArrowRight') { lbCurrent = (lbCurrent + 1) % slideData.length; updateLightbox(); }
   });
 
-  
   let lbTouchX = 0;
   lightbox.addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
   lightbox.addEventListener('touchend', e => {
@@ -388,10 +381,8 @@ document.querySelectorAll('img[loading="lazy"]').forEach(img => {
   }
 });
 
-// Загрузка отзывов с API сервера
 const API_URL = 'http://localhost:3000/api/reviews';
 
-// Резервные отзывы (если API недоступен)
 const fallbackReviews = [
   {
     name: "Валера",
@@ -441,11 +432,9 @@ const reviewsPrev = document.getElementById('reviewsPrev');
 const reviewsNext = document.getElementById('reviewsNext');
 
 if (reviewsTrack) {
-  // Инициализация отзывов
   (async function initReviews() {
     const realReviews = await loadReviews();
     
-    // Очищаем существующие отзывы и создаем новые из реальных данных
     reviewsTrack.innerHTML = '';
     
     if (realReviews.length === 0) {
@@ -501,18 +490,15 @@ if (reviewsTrack) {
     const currentCard = cards[rCurrent];
     const nextCard = cards[newIndex];
     
-    // Скрываем текущую карточку
     currentCard.style.opacity = '0';
     currentCard.style.transition = 'opacity 0.3s ease-in-out';
     
     setTimeout(() => {
       currentCard.style.display = 'none';
       
-      // Показываем новую карточку
       nextCard.style.display = 'block';
       nextCard.style.opacity = '0';
       
-      // Плавное появление
       setTimeout(() => {
         nextCard.style.transition = 'opacity 0.3s ease-in-out';
         nextCard.style.opacity = '1';
@@ -560,7 +546,7 @@ if (reviewsTrack) {
       startX = null;
     });
   }
-  })(); // Конец async IIFE
+  })();
 }
 
 const workStatusEl = document.getElementById('workStatus');

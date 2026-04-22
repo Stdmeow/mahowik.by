@@ -381,7 +381,7 @@ document.querySelectorAll('img[loading="lazy"]').forEach(img => {
   }
 });
 
-const API_URL = 'http://localhost:3000/api/reviews';
+const API_URL = window.location.origin + '/api/reviews';
 
 const fallbackReviews = [
   {

@@ -33,6 +33,16 @@ if (track) {
     caption: s.querySelector('.slider__caption') ? s.querySelector('.slider__caption').textContent : ''
   }));
 
+  slides.forEach((slide, i) => {
+    if (i === 0) {
+      slide.style.display = 'flex';
+      slide.style.opacity = '1';
+    } else {
+      slide.style.display = 'none';
+      slide.style.opacity = '0';
+    }
+  });
+
   slides.forEach((_, i) => {
     const dot = document.createElement('button');
     dot.className = 'slider__dot' + (i === 0 ? ' active' : '');
@@ -42,8 +52,30 @@ if (track) {
   });
 
   function goTo(index) {
-    current = (index + slides.length) % slides.length;
-    track.style.transform = `translateX(-${current * 100}%)`;
+    const newIndex = (index + slides.length) % slides.length;
+    if (newIndex === current) return;
+    
+    const currentSlide = slides[current];
+    const nextSlide = slides[newIndex];
+    
+    currentSlide.style.opacity = '0';
+    currentSlide.style.transition = 'opacity 0.3s ease-in-out';
+    
+    setTimeout(() => {
+      currentSlide.style.display = 'none';
+      
+      nextSlide.style.display = 'flex';
+      nextSlide.style.opacity = '0';
+      
+      setTimeout(() => {
+        nextSlide.style.transition = 'opacity 0.3s ease-in-out';
+        nextSlide.style.opacity = '1';
+      }, 50);
+      
+    }, 300);
+    
+    current = newIndex;
+    
     dotsContainer.querySelectorAll('.slider__dot').forEach((d, i) => {
       d.classList.toggle('active', i === current);
     });
@@ -60,19 +92,22 @@ if (track) {
   track.addEventListener('touchstart', e => { 
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
-  }, { passive: true });
+  });
   track.addEventListener('touchmove', e => {
     const touchX = e.touches[0].clientX;
     const touchY = e.touches[0].clientY;
     const diffX = Math.abs(touchStartX - touchX);
     const diffY = Math.abs(touchStartY - touchY);
-    if (diffX > diffY) {
+    if (diffX > diffY && diffX > 10) {
       e.preventDefault();
     }
   }, { passive: false });
   track.addEventListener('touchend', e => {
     const diff = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 40) { goTo(current + (diff > 0 ? 1 : -1)); resetAuto(); }
+    if (Math.abs(diff) > 40) { 
+      goTo(current + (diff > 0 ? 1 : -1)); 
+      resetAuto(); 
+    }
   });
 
   slides.forEach((slide, i) => {

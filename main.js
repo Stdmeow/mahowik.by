@@ -56,7 +56,20 @@ if (track) {
   nextBtn.addEventListener('click', () => { goTo(current + 1); resetAuto(); });
 
   let touchStartX = 0;
-  track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  let touchStartY = 0;
+  track.addEventListener('touchstart', e => { 
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  track.addEventListener('touchmove', e => {
+    const touchX = e.touches[0].clientX;
+    const touchY = e.touches[0].clientY;
+    const diffX = Math.abs(touchStartX - touchX);
+    const diffY = Math.abs(touchStartY - touchY);
+    if (diffX > diffY) {
+      e.preventDefault();
+    }
+  }, { passive: false });
   track.addEventListener('touchend', e => {
     const diff = touchStartX - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 40) { goTo(current + (diff > 0 ? 1 : -1)); resetAuto(); }
@@ -109,7 +122,20 @@ if (track) {
   });
 
   let lbTouchX = 0;
-  lightbox.addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+  let lbTouchY = 0;
+  lightbox.addEventListener('touchstart', e => { 
+    lbTouchX = e.touches[0].clientX;
+    lbTouchY = e.touches[0].clientY;
+  }, { passive: true });
+  lightbox.addEventListener('touchmove', e => {
+    const touchX = e.touches[0].clientX;
+    const touchY = e.touches[0].clientY;
+    const diffX = Math.abs(lbTouchX - touchX);
+    const diffY = Math.abs(lbTouchY - touchY);
+    if (diffX > diffY && diffX > 10) {
+      e.preventDefault();
+    }
+  }, { passive: false });
   lightbox.addEventListener('touchend', e => {
     const diff = lbTouchX - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 40) {
@@ -619,9 +645,23 @@ if (reviewsTrack) {
   const reviewsWrap = document.querySelector('.reviews__track-wrap');
   
   if (reviewsWrap) {
+    let reviewTouchStartX = 0;
+    let reviewTouchStartY = 0;
+    
     reviewsWrap.addEventListener('touchstart', (e) => {
-      startX = e.touches[0].clientX;
+      reviewTouchStartX = e.touches[0].clientX;
+      reviewTouchStartY = e.touches[0].clientY;
     });
+
+    reviewsWrap.addEventListener('touchmove', (e) => {
+      const touchX = e.touches[0].clientX;
+      const touchY = e.touches[0].clientY;
+      const diffX = Math.abs(reviewTouchStartX - touchX);
+      const diffY = Math.abs(reviewTouchStartY - touchY);
+      if (diffX > diffY && diffX > 10) {
+        e.preventDefault();
+      }
+    }, { passive: false });
 
     reviewsWrap.addEventListener('touchend', (e) => {
       if (startX === null) return;

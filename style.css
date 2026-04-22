@@ -64,6 +64,13 @@ img { max-width: 100%; display: block; }
   display: flex;
   align-items: center;
   gap: 14px;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.3s ease;
+}
+
+.logo:hover {
+  opacity: 0.8;
 }
 
 .logo__icon {
@@ -737,7 +744,7 @@ img { max-width: 100%; display: block; }
 
 .footer {
   background: #0d0d1a;
-  padding: 24px 0;
+  padding: 24px 0 100px 0;
   border-top: 2px solid var(--yellow);
 }
 

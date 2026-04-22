@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+const cheerio = require('cheerio');
 const path = require('path');
 
 const app = express();
@@ -30,77 +31,57 @@ async function parseReviews() {
       timeout: 10000
     });
 
-    const html = response.data;
+    const $ = cheerio.load(response.data);
     const reviews = [];
     
-    const lines = html.split('\n');
-    let currentReview = null;
-    
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i].trim();
+    $('.review-item, .review, [class*="review-"]').each((index, element) => {
+      const $el = $(element);
       
-      const dateMatch = line.match(/(\d{1,2}\s+(?:января|февраля|марта|апреля|мая|июня|июля|августа|сентября|октября|ноября|декабря)\s+\d{4})\s+в\s+\d{1,2}:\d{2}/);
+      const nameEl = $el.find('.review-name, .review-author, [class*="name"], [class*="author"]').first();
+      const dateEl = $el.find('.review-date, [class*="date"]').first();
+      const textEl = $el.find('.review-text, .review-content, [class*="text"], [class*="content"]').first();
       
-      if (dateMatch) {
-        if (currentReview && currentReview.text) {
-          const isNegative = 
-            currentReview.text.includes('не рекомендую') || 
-            currentReview.text.includes('был послан') ||
-            currentReview.text.includes('гарантия прошла') ||
-            currentReview.text.includes('вибрации при запуске');
-          
-          if (!isNegative && currentReview.text.length > 30) {
-            let stars = 5;
-            if (currentReview.text.includes('нормально') || currentReview.text.includes('неплохо')) {
-              stars = 4;
-            }
-            
-            reviews.push({
-              name: currentReview.name,
-              date: currentReview.date,
-              stars: stars,
-              text: currentReview.text,
-              car: extractCarModel(currentReview.text)
-            });
-          }
+      let name = nameEl.text().trim();
+      let date = dateEl.text().trim();
+      let text = textEl.text().trim();
+      
+      if (!text || text.length < 30) {
+        text = $el.text().trim();
+        const dateMatch = text.match(/(\d{1,2}\s+(?:января|февраля|марта|апреля|мая|июня|июля|августа|сентября|октября|ноября|декабря)\s+\d{4})/);
+        if (dateMatch) {
+          date = dateMatch[1];
+          text = text.replace(dateMatch[0], '').trim();
         }
-        
-        const nameLine = lines[i - 1] ? lines[i - 1].trim() : '';
-        const textLine = lines[i + 1] ? lines[i + 1].trim() : '';
-        
-        currentReview = {
-          name: nameLine || 'Клиент',
-          date: dateMatch[1],
-          text: textLine
-        };
-      } else if (currentReview && line.length > 0 && !line.match(/^\d/) && line.length > 10) {
-        currentReview.text += ' ' + line;
       }
-    }
-    
-    if (currentReview && currentReview.text) {
-      const isNegative = 
-        currentReview.text.includes('не рекомендую') || 
-        currentReview.text.includes('был послан') ||
-        currentReview.text.includes('гарантия прошла');
       
-      if (!isNegative && currentReview.text.length > 30) {
+      if (!name) {
+        const lines = $el.text().split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        if (lines.length > 0) name = lines[0];
+      }
+      
+      const isNegative = 
+        text.includes('не рекомендую') || 
+        text.includes('был послан') ||
+        text.includes('гарантия прошла') ||
+        text.includes('вибрации при запуске');
+      
+      if (!isNegative && text.length > 30 && name && date) {
         let stars = 5;
-        if (currentReview.text.includes('нормально') || currentReview.text.includes('неплохо')) {
+        if (text.includes('нормально') || text.includes('неплохо')) {
           stars = 4;
         }
         
         reviews.push({
-          name: currentReview.name,
-          date: currentReview.date,
+          name: name.substring(0, 50),
+          date: date,
           stars: stars,
-          text: currentReview.text,
-          car: extractCarModel(currentReview.text)
+          text: text.substring(0, 500),
+          car: extractCarModel(text)
         });
       }
-    }
+    });
 
-    console.log(`Найдено отзывов: ${reviews.length}`);
+    console.log(`Найдено отзывов через cheerio: ${reviews.length}`);
 
     if (reviews.length === 0) {
       console.warn('Парсинг не дал результатов, используем резервные данные');

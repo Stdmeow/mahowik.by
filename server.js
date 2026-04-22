@@ -5,6 +5,7 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const SOCKET_PATH = process.env.SOCKET_PATH || null;
 
 app.use(cors());
 app.use(express.json());
@@ -31,27 +32,79 @@ async function parseReviews() {
 
     const html = response.data;
     const reviews = [];
-    const reviewPattern = /([А-Яа-яA-Za-z\s]+)\s+(\d{1,2}\s+[а-я]+\s+\d{4})\s+в\s+\d{1,2}:\d{2}\s+(.*?)(?=\n\s*\n|\n\s*[А-Я]|$)/gs;
-    const matches = [...html.matchAll(reviewPattern)];
     
-    for (const match of matches) {
-      const name = match[1].trim();
-      const date = match[2].trim();
-      const text = match[3].trim();
+    const lines = html.split('\n');
+    let currentReview = null;
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
       
-      const isNegative = text.includes('не рекомендую') || text.includes('был послан') || text.includes('гарантия прошла');
-      let stars = 5;
-      if (text.includes('нормально') || text.includes('неплохо')) stars = 4;
+      const dateMatch = line.match(/(\d{1,2}\s+(?:января|февраля|марта|апреля|мая|июня|июля|августа|сентября|октября|ноября|декабря)\s+\d{4})\s+в\s+\d{1,2}:\d{2}/);
       
-      if (!isNegative && text.length > 30 && text.length < 1000) {
+      if (dateMatch) {
+        if (currentReview && currentReview.text) {
+          const isNegative = 
+            currentReview.text.includes('не рекомендую') || 
+            currentReview.text.includes('был послан') ||
+            currentReview.text.includes('гарантия прошла') ||
+            currentReview.text.includes('вибрации при запуске');
+          
+          if (!isNegative && currentReview.text.length > 30) {
+            let stars = 5;
+            if (currentReview.text.includes('нормально') || currentReview.text.includes('неплохо')) {
+              stars = 4;
+            }
+            
+            reviews.push({
+              name: currentReview.name,
+              date: currentReview.date,
+              stars: stars,
+              text: currentReview.text,
+              car: extractCarModel(currentReview.text)
+            });
+          }
+        }
+        
+        const nameLine = lines[i - 1] ? lines[i - 1].trim() : '';
+        const textLine = lines[i + 1] ? lines[i + 1].trim() : '';
+        
+        currentReview = {
+          name: nameLine || 'Клиент',
+          date: dateMatch[1],
+          text: textLine
+        };
+      } else if (currentReview && line.length > 0 && !line.match(/^\d/) && line.length > 10) {
+        currentReview.text += ' ' + line;
+      }
+    }
+    
+    if (currentReview && currentReview.text) {
+      const isNegative = 
+        currentReview.text.includes('не рекомендую') || 
+        currentReview.text.includes('был послан') ||
+        currentReview.text.includes('гарантия прошла');
+      
+      if (!isNegative && currentReview.text.length > 30) {
+        let stars = 5;
+        if (currentReview.text.includes('нормально') || currentReview.text.includes('неплохо')) {
+          stars = 4;
+        }
+        
         reviews.push({
-          name: name,
-          date: date,
+          name: currentReview.name,
+          date: currentReview.date,
           stars: stars,
-          text: text,
-          car: extractCarModel(text)
+          text: currentReview.text,
+          car: extractCarModel(currentReview.text)
         });
       }
+    }
+
+    console.log(`Найдено отзывов: ${reviews.length}`);
+
+    if (reviews.length === 0) {
+      console.warn('Парсинг не дал результатов, используем резервные данные');
+      return getFallbackReviews();
     }
 
     return reviews
@@ -59,7 +112,8 @@ async function parseReviews() {
       .sort((a, b) => parseDate(b.date) - parseDate(a.date));
 
   } catch (error) {
-    return [];
+    console.error('Ошибка парсинга:', error.message);
+    return getFallbackReviews();
   }
 }
 
@@ -107,7 +161,14 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Сервер запущен на порту ${PORT}`);
-  console.log(`📊 API отзывов: /api/reviews`);
-});
+if (SOCKET_PATH) {
+  app.listen(SOCKET_PATH, () => {
+    console.log(`🚀 Сервер запущен на сокете ${SOCKET_PATH}`);
+    console.log(`📊 API отзывов: /api/reviews`);
+  });
+} else {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Сервер запущен на порту ${PORT}`);
+    console.log(`📊 API отзывов: /api/reviews`);
+  });
+}
